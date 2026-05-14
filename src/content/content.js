@@ -1,5 +1,20 @@
 // Content script - Bridges page and background script
 
+// Signal a real document load to the background script. Content scripts are
+// re-injected on every full page load/reload but NOT on SPA route changes
+// (history.pushState/replaceState), so this is the reliable moment — and the
+// only one — to clear a tab's stale WebSocket connections. Top frame only,
+// so an iframe reload never wipes the parent page's connections.
+if (window === window.top) {
+  try {
+    chrome.runtime.sendMessage({ type: "page-loaded" }).catch(() => {
+      // Ignore — background may not be ready yet
+    });
+  } catch (error) {
+    // Ignore — extension context may be reloading
+  }
+}
+
 // Check if extension is enabled
 function checkExtensionEnabled() {
   return new Promise((resolve) => {

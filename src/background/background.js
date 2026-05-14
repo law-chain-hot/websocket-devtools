@@ -287,6 +287,33 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       break;
     }
 
+    case "page-loaded": {
+      // A real document load happened in this tab. The content script is
+      // re-injected on every full page load/reload but NOT on SPA route
+      // changes (history.pushState/replaceState), so this is the only
+      // reliable signal that justifies dropping a tab's connections.
+      const loadedTabId = sender.tab?.id;
+      if (loadedTabId) {
+        const originalCount = websocketData.connections.length;
+        websocketData.connections = websocketData.connections.filter(
+          (conn) => conn.tabId !== loadedTabId
+        );
+
+        // Notify the DevTools panel so it can reset its state.
+        forwardToDevTools({
+          type: "page-refresh",
+          data: {
+            tabId: loadedTabId,
+            timestamp: Date.now(),
+            removedConnections: originalCount - websocketData.connections.length,
+            navigationUrl: sender.tab?.url || sender.url || null,
+          },
+        });
+      }
+      sendResponse({ received: true });
+      break;
+    }
+
     default: {
       sendResponse({ error: "Unknown message type" });
       break;
@@ -346,82 +373,15 @@ function forwardToDevTools(message) {
   }
 }
 
-// Track tab URLs to detect real page navigation vs URL changes
-const tabUrls = new Map(); // tabId -> { url, lastUpdate }
-
-// Listen for tab updates, detect page refresh/navigation
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  // When page starts loading (refresh or navigation), check if it's a real navigation
-  if (changeInfo.status === "loading" && changeInfo.url) {
-    const currentUrl = changeInfo.url;
-    const previousData = tabUrls.get(tabId);
-    
-    // Extract base URL without query parameters and hash
-    const getBaseUrl = (url) => {
-      try {
-        const urlObj = new URL(url);
-        return `${urlObj.protocol}//${urlObj.host}${urlObj.pathname}`;
-      } catch (e) {
-        return url;
-      }
-    };
-    
-    const currentBaseUrl = getBaseUrl(currentUrl);
-    const previousBaseUrl = previousData ? getBaseUrl(previousData.url) : null;
-    
-    // Only clear connections if this is a real navigation (base URL changed)
-    // or if it's the first time we see this tab
-    const isRealNavigation = !previousData || currentBaseUrl !== previousBaseUrl;
-    
-    if (isRealNavigation) {
-      console.log(`[WebSocket Proxy] Real navigation detected for tab ${tabId}: ${previousBaseUrl} -> ${currentBaseUrl}`);
-      
-      // Clear connection data for this tab
-      const originalCount = websocketData.connections.length;
-      websocketData.connections = websocketData.connections.filter(conn => conn.tabId !== tabId);
-      
-      // Always notify DevTools panel about page refresh, even if no connections to clear
-      // This ensures the panel can reset its state properly
-      forwardToDevTools({
-        type: "page-refresh",
-        data: {
-          tabId: tabId,
-          timestamp: Date.now(),
-          removedConnections: originalCount - websocketData.connections.length,
-          navigationUrl: currentUrl,
-        },
-      });
-    } else {
-      console.log(`[WebSocket Proxy] URL query/hash change detected for tab ${tabId}, preserving connections`);
-      
-      // Send URL update event instead of page refresh
-      forwardToDevTools({
-        type: "url-update",
-        data: {
-          tabId: tabId,
-          timestamp: Date.now(),
-          newUrl: currentUrl,
-          previousUrl: previousData.url,
-        },
-      });
-    }
-    
-    // Update tracked URL
-    tabUrls.set(tabId, {
-      url: currentUrl,
-      lastUpdate: Date.now()
-    });
-  }
-  
-  if (changeInfo.status === "complete" && websocketData.isMonitoring) {
-    // Can re-inject script or send status update here
-  }
-});
-
-// Clean up tab URL tracking when tabs are closed
-chrome.tabs.onRemoved.addListener((tabId) => {
-  tabUrls.delete(tabId);
-});
+// NOTE: Page-navigation detection used to live here as a chrome.tabs.onUpdated
+// listener that compared URL pathnames. That heuristic was wrong for SPAs:
+// a client-side route change (history.pushState) changes the pathname WITHOUT
+// reloading the document, so the listener wiped still-alive connections from
+// the panel (GitHub issue #25).
+//
+// Real document loads are now detected by the content script itself: it is
+// re-injected on every full page load/reload but never on an SPA route change,
+// and it sends a "page-loaded" message (handled in the onMessage switch above).
 
 // When extension starts up
 chrome.runtime.onStartup.addListener(() => {
