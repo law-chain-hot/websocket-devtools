@@ -290,25 +290,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     case "page-loaded": {
       // A real document load happened in this tab. The content script is
       // re-injected on every full page load/reload but NOT on SPA route
-      // changes (history.pushState/replaceState), so this is the only
+      // changes (history.pushState/replaceState), so this is the
       // reliable signal that justifies dropping a tab's connections.
       const loadedTabId = sender.tab?.id;
       if (loadedTabId) {
-        const originalCount = websocketData.connections.length;
-        websocketData.connections = websocketData.connections.filter(
-          (conn) => conn.tabId !== loadedTabId
-        );
-
-        // Notify the DevTools panel so it can reset its state.
-        forwardToDevTools({
-          type: "page-refresh",
-          data: {
-            tabId: loadedTabId,
-            timestamp: Date.now(),
-            removedConnections: originalCount - websocketData.connections.length,
-            navigationUrl: sender.tab?.url || sender.url || null,
-          },
-        });
+        clearTabConnections(loadedTabId, sender.tab?.url || sender.url || null);
       }
       sendResponse({ received: true });
       break;
@@ -373,15 +359,47 @@ function forwardToDevTools(message) {
   }
 }
 
-// NOTE: Page-navigation detection used to live here as a chrome.tabs.onUpdated
-// listener that compared URL pathnames. That heuristic was wrong for SPAs:
-// a client-side route change (history.pushState) changes the pathname WITHOUT
+// Drop all stored connections for a tab and tell the DevTools panel to reset.
+function clearTabConnections(tabId, navigationUrl = null) {
+  const originalCount = websocketData.connections.length;
+  websocketData.connections = websocketData.connections.filter(
+    (conn) => conn.tabId !== tabId
+  );
+
+  forwardToDevTools({
+    type: "page-refresh",
+    data: {
+      tabId: tabId,
+      timestamp: Date.now(),
+      removedConnections: originalCount - websocketData.connections.length,
+      navigationUrl: navigationUrl,
+    },
+  });
+}
+
+// Page-navigation detection used to compare URL pathnames in a
+// chrome.tabs.onUpdated listener. That heuristic was wrong for SPAs: a
+// client-side route change (history.pushState) changes the pathname WITHOUT
 // reloading the document, so the listener wiped still-alive connections from
 // the panel (GitHub issue #25).
 //
-// Real document loads are now detected by the content script itself: it is
+// Real document loads are now detected by the content script, which is
 // re-injected on every full page load/reload but never on an SPA route change,
-// and it sends a "page-loaded" message (handled in the onMessage switch above).
+// and sends a "page-loaded" message (handled in the onMessage switch above).
+//
+// The listener below only covers the gap the content script cannot: a tab
+// navigating to a URL where the content script never runs (chrome://, file://,
+// extension pages, etc.). It is scoped strictly to non-http(s) destinations,
+// so it can never fire for an SPA route change (those always stay on http/s).
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+  if (!changeInfo.url) return;
+
+  const isContentScriptUrl = /^https?:\/\//i.test(changeInfo.url);
+  if (isContentScriptUrl) return; // handled by the content script's "page-loaded"
+
+  // Navigated somewhere the content script can't reach — clear stale connections.
+  clearTabConnections(tabId, changeInfo.url);
+});
 
 // When extension starts up
 chrome.runtime.onStartup.addListener(() => {
