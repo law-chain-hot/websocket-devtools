@@ -4,7 +4,7 @@ import { filterMessages } from "../utils/filterUtils";
 import JsonViewer from "./JsonViewer";
 import useNewMessageHighlight from "../hooks/useNewMessageHighlight";
 import { addFromMessageList } from "../utils/globalFavorites";
-import { Ban, Search, Settings, CircleX } from "lucide-react";
+import { Ban, Search, Settings, CircleX, ListTree } from "lucide-react";
 import { t } from "../utils/i18n.js";
 import CheeseIcon from "../Icons/cheese.jsx";
 import ProtobufIcon from "../Icons/Protobuf.jsx";
@@ -76,6 +76,12 @@ const MessageDetails = ({
   const [copiedMessageKey, setCopiedMessageKey] = useState(null); // Copied message key
   const [sortOrder, setSortOrder] = useState("desc"); // 'asc' | 'desc' time sorting
   const [hoveredMessageKey, setHoveredMessageKey] = useState(null); // Hovered message key
+  const [groupEnabled, setGroupEnabled] = useState(false);
+  const [groupField, setGroupField] = useState("requestID");
+  const [groupValue, setGroupValue] = useState("");
+  const [groupDisplayField, setGroupDisplayField] = useState("");
+  const [groupSortMode, setGroupSortMode] = useState("firstOutgoing");
+  const [collapsedGroups, setCollapsedGroups] = useState({});
 
   
   // Use new message highlight hook
@@ -258,6 +264,288 @@ const MessageDetails = ({
     return message.data ? message.data.length : 0;
   };
 
+  const safeParseJson = (value) => {
+    if (typeof value !== "string") {
+      return value && typeof value === "object" ? value : null;
+    }
+
+    const trimmed = value.trim();
+    if (!trimmed || (!trimmed.startsWith("{") && !trimmed.startsWith("["))) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(trimmed);
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const getValueByPath = (source, path) => {
+    if (!source || typeof source !== "object" || !path) return undefined;
+
+    return path.split(".").reduce((current, key) => {
+      if (current === undefined || current === null) return undefined;
+      return current[key];
+    }, source);
+  };
+
+  const findValuesByKey = (source, targetKey) => {
+    const values = [];
+    const normalizedTargetKey = targetKey.toLowerCase();
+
+    const visit = (node) => {
+      if (!node || typeof node !== "object") return;
+
+      if (Array.isArray(node)) {
+        node.forEach(visit);
+        return;
+      }
+
+      Object.entries(node).forEach(([key, value]) => {
+        if (key.toLowerCase() === normalizedTargetKey) {
+          values.push(value);
+        }
+        visit(value);
+      });
+    };
+
+    visit(source);
+    return values;
+  };
+
+  const normalizeGroupValue = (value) => {
+    if (value === undefined || value === null) return "";
+    if (typeof value === "object") {
+      try {
+        return JSON.stringify(value);
+      } catch (error) {
+        return String(value);
+      }
+    }
+    return String(value);
+  };
+
+  const escapeRegExp = (value) => {
+    return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  };
+
+  const extractGroupValues = (message, fieldName) => {
+    if (!fieldName || !message || message.type !== "message") return [];
+
+    const candidateData = [message.data, message.protobufDecoded].filter(
+      (candidate) => candidate !== undefined && candidate !== null
+    );
+
+    for (const candidate of candidateData) {
+      const parsed = safeParseJson(candidate);
+      if (!parsed) continue;
+
+      const directValue = getValueByPath(parsed, fieldName);
+      if (directValue !== undefined) {
+        return [normalizeGroupValue(directValue)];
+      }
+
+      if (!fieldName.includes(".")) {
+        const recursiveValues = findValuesByKey(parsed, fieldName);
+        if (recursiveValues.length > 0) {
+          return recursiveValues.map(normalizeGroupValue);
+        }
+      }
+    }
+
+    const textData = candidateData
+      .filter((candidate) => typeof candidate === "string")
+      .join("\n");
+
+    if (!textData) return [];
+
+    const fieldPattern = escapeRegExp(fieldName);
+    const quotedStringValuePattern = new RegExp(
+      `"${fieldPattern}"\\s*:\\s*"([^"]*)"`,
+      "i"
+    );
+    const primitiveValuePattern = new RegExp(
+      `"${fieldPattern}"\\s*:\\s*([^,}\\]\\s]+)`,
+      "i"
+    );
+    const match =
+      textData.match(quotedStringValuePattern) ||
+      textData.match(primitiveValuePattern);
+
+    return match ? [match[1]] : [];
+  };
+
+  const messageMatchesGroupValue = (message, fieldName, value) => {
+    const expectedValue = value.trim();
+    const values = extractGroupValues(message, fieldName);
+
+    if (!expectedValue) {
+      return values.length > 0;
+    }
+
+    return values.some((currentValue) => currentValue === expectedValue);
+  };
+
+  const getGroupDisplayValue = (messages, displayField) => {
+    const trimmedDisplayField = displayField.trim();
+    if (!trimmedDisplayField) return "";
+
+    const uniqueValues = [];
+    const seenValues = new Set();
+
+    messages.forEach((message) => {
+      extractGroupValues(message, trimmedDisplayField).forEach((value) => {
+        if (!value || seenValues.has(value)) return;
+        seenValues.add(value);
+        uniqueValues.push(value);
+      });
+    });
+
+    if (uniqueValues.length === 0) return "";
+
+    const visibleValues = uniqueValues.slice(0, 2).join(", ");
+    return uniqueValues.length > 2
+      ? `${trimmedDisplayField}: ${visibleValues} +${uniqueValues.length - 2}`
+      : `${trimmedDisplayField}: ${visibleValues}`;
+  };
+
+  const getFirstOutgoingTimestamp = (messages) => {
+    const outgoingTimestamps = messages
+      .filter((message) => message.direction === "outgoing")
+      .map((message) => message.timestamp);
+
+    if (outgoingTimestamps.length > 0) {
+      return Math.min(...outgoingTimestamps);
+    }
+
+    const messageTimestamps = messages.map((message) => message.timestamp);
+    return messageTimestamps.length > 0 ? Math.min(...messageTimestamps) : Number.MAX_SAFE_INTEGER;
+  };
+
+  const getFirstMessageTimestamp = (messages) => {
+    const messageTimestamps = messages.map((message) => message.timestamp);
+    return messageTimestamps.length > 0 ? Math.min(...messageTimestamps) : Number.MAX_SAFE_INTEGER;
+  };
+
+  const getLatestMessageTimestamp = (messages) => {
+    const messageTimestamps = messages.map((message) => message.timestamp);
+    return messageTimestamps.length > 0 ? Math.max(...messageTimestamps) : Number.MIN_SAFE_INTEGER;
+  };
+
+  const sortSections = (sections) => {
+    return [...sections].sort((a, b) => {
+      let diff = 0;
+
+      switch (groupSortMode) {
+        case "firstMessage":
+          diff = getFirstMessageTimestamp(a.messages) - getFirstMessageTimestamp(b.messages);
+          break;
+        case "latestMessage":
+          diff = getLatestMessageTimestamp(b.messages) - getLatestMessageTimestamp(a.messages);
+          break;
+        case "groupValue":
+          diff = a.title.localeCompare(b.title);
+          break;
+        case "messageCount":
+          diff = b.messages.length - a.messages.length;
+          break;
+        case "firstOutgoing":
+        default:
+          diff = getFirstOutgoingTimestamp(a.messages) - getFirstOutgoingTimestamp(b.messages);
+          break;
+      }
+
+      if (diff !== 0) return diff;
+      return a.title.localeCompare(b.title);
+    });
+  };
+
+  const getMessageSections = () => {
+    const trimmedField = groupField.trim();
+    const trimmedValue = groupValue.trim();
+
+    if (!groupEnabled || !trimmedField) {
+      return [{ id: "all", title: "", messages: sortedMessages, isGrouped: false }];
+    }
+
+    if (trimmedValue) {
+      const groupedMessages = [];
+      const ungroupedMessages = [];
+
+      sortedMessages.forEach((message) => {
+        if (messageMatchesGroupValue(message, trimmedField, trimmedValue)) {
+          groupedMessages.push(message);
+        } else {
+          ungroupedMessages.push(message);
+        }
+      });
+
+      return sortSections([
+        {
+          id: `match:${trimmedField}:${trimmedValue}`,
+          title: `${trimmedField} = ${trimmedValue}`,
+          messages: groupedMessages,
+          displayValue: getGroupDisplayValue(groupedMessages, groupDisplayField),
+          isGrouped: true,
+        },
+        {
+          id: `other:${trimmedField}:${trimmedValue}`,
+          title: t("messageDetails.grouping.other"),
+          messages: ungroupedMessages,
+          displayValue: getGroupDisplayValue(ungroupedMessages, groupDisplayField),
+          isGrouped: true,
+        },
+      ].filter((section) => section.messages.length > 0));
+    }
+
+    const sectionsByValue = new Map();
+    const noValueMessages = [];
+
+    sortedMessages.forEach((message) => {
+      const values = extractGroupValues(message, trimmedField);
+      if (values.length === 0) {
+        noValueMessages.push(message);
+        return;
+      }
+
+      const firstValue = values[0];
+      if (!sectionsByValue.has(firstValue)) {
+        sectionsByValue.set(firstValue, []);
+      }
+      sectionsByValue.get(firstValue).push(message);
+    });
+
+    const groupedSections = Array.from(sectionsByValue.entries()).map(
+      ([value, messages]) => ({
+        id: `value:${trimmedField}:${value}`,
+        title: `${trimmedField} = ${value}`,
+        messages,
+        displayValue: getGroupDisplayValue(messages, groupDisplayField),
+        isGrouped: true,
+      })
+    );
+
+    if (noValueMessages.length > 0) {
+      groupedSections.push({
+        id: `missing:${trimmedField}`,
+        title: t("messageDetails.grouping.noField", { field: trimmedField }),
+        messages: noValueMessages,
+        displayValue: getGroupDisplayValue(noValueMessages, groupDisplayField),
+        isGrouped: true,
+      });
+    }
+
+    return sortSections(groupedSections);
+  };
+
+  const toggleGroupCollapse = (groupId) => {
+    setCollapsedGroups((previous) => ({
+      ...previous,
+      [groupId]: !previous[groupId],
+    }));
+  };
+
   // Copy message content to clipboard
   const handleCopyMessage = async (messageData, messageKey) => {
     try {
@@ -398,6 +686,36 @@ const MessageDetails = ({
     );
   };
 
+  const messageSections = getMessageSections();
+
+  const renderMessageRow = (message, index) => {
+    const messageKey = message.messageId;
+    const isSelected = selectedMessageKey === messageKey;
+    const isNewMsg = isNewMessage(messageKey);
+    const isHovered = hoveredMessageKey === messageKey;
+
+    return (
+      <tr
+        key={`${messageKey}-${index}`}
+        data-message-id={messageKey}
+        className={`message-row ${message.direction} ${message.simulated ? "simulated" : ""} ${
+          message.blocked ? "blocked" : ""
+        } ${isSelected ? "selected" : ""} ${isNewMsg ? "new-message" : ""} ${
+          isHovered ? "hovered" : ""
+        }`}
+        onClick={() => handleMessageClick(messageKey)}
+        onMouseEnter={() => setHoveredMessageKey(messageKey)}
+        onMouseLeave={() => setHoveredMessageKey(null)}
+      >
+        <td className="col-data">
+          <div className="data-cell-wrapper">{renderDataCell(message)}</div>
+        </td>
+        <td className="col-length">{getMessageLength(message)}</td>
+        <td className="col-time">{formatTimestamp(message.timestamp)}</td>
+      </tr>
+    );
+  };
+
   return (
     <div className="message-details">
       <div className="details-header">
@@ -445,6 +763,63 @@ const MessageDetails = ({
               <Ban size={14} />
             </button>
           </div>
+          <div className="control-row group-control-row">
+            <label className="invert-checkbox group-enable-checkbox" title={t("messageDetails.grouping.tooltip")}>
+              <input type="checkbox" checked={groupEnabled} onChange={(e) => setGroupEnabled(e.target.checked)} />
+              <span className="checkmark"></span>
+              <span className="checkbox-label group-checkbox-label">
+                <ListTree size={12} />
+                {t("messageDetails.grouping.enable")}
+              </span>
+            </label>
+            <div className="filter-controls group-field-filter">
+              <label>{t("messageDetails.grouping.field")}</label>
+              <input
+                type="text"
+                value={groupField}
+                onChange={(e) => setGroupField(e.target.value)}
+                placeholder="requestID"
+                disabled={!groupEnabled}
+              />
+            </div>
+            <div className="filter-controls group-value-filter">
+              <label>{t("messageDetails.grouping.value")}</label>
+              <input
+                type="text"
+                value={groupValue}
+                onChange={(e) => setGroupValue(e.target.value)}
+                placeholder="1000002"
+                disabled={!groupEnabled}
+              />
+            </div>
+            <div className="filter-controls group-display-field-filter">
+              <label>{t("messageDetails.grouping.displayField")}</label>
+              <input
+                type="text"
+                value={groupDisplayField}
+                onChange={(e) => setGroupDisplayField(e.target.value)}
+                placeholder="eventID"
+                disabled={!groupEnabled}
+              />
+            </div>
+            <div className="filter-controls group-sort-filter">
+              <label>{t("messageDetails.grouping.sort")}</label>
+              <select
+                value={groupSortMode}
+                onChange={(e) => setGroupSortMode(e.target.value)}
+                disabled={!groupEnabled}
+              >
+                <option value="firstOutgoing">{t("messageDetails.grouping.sort.firstOutgoing")}</option>
+                <option value="firstMessage">{t("messageDetails.grouping.sort.firstMessage")}</option>
+                <option value="latestMessage">{t("messageDetails.grouping.sort.latestMessage")}</option>
+                <option value="groupValue">{t("messageDetails.grouping.sort.groupValue")}</option>
+                <option value="messageCount">{t("messageDetails.grouping.sort.messageCount")}</option>
+              </select>
+            </div>
+            {groupEnabled && (
+              <span className="group-help-text">{t("messageDetails.grouping.emptyValueHint")}</span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -472,32 +847,31 @@ const MessageDetails = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {sortedMessages.map((message, index) => {
-                      const messageKey = message.messageId;
-                      const isSelected = selectedMessageKey === messageKey;
-                      const isNewMsg = isNewMessage(messageKey);
-                      const isHovered = hoveredMessageKey === messageKey;
-                      return (
-                        <tr
-                          key={`${messageKey}-${index}`} // Keep React key unique
-                          data-message-id={messageKey}
-                          className={`message-row ${message.direction} ${message.simulated ? "simulated" : ""} ${
-                            message.blocked ? "blocked" : ""
-                          } ${isSelected ? "selected" : ""} ${isNewMsg ? "new-message" : ""} ${
-                            isHovered ? "hovered" : ""
-                          }`}
-                          onClick={() => handleMessageClick(messageKey)}
-                          onMouseEnter={() => setHoveredMessageKey(messageKey)}
-                          onMouseLeave={() => setHoveredMessageKey(null)}
-                        >
-                          <td className="col-data">
-                            <div className="data-cell-wrapper">{renderDataCell(message)}</div>
-                          </td>
-                          <td className="col-length">{getMessageLength(message)}</td>
-                          <td className="col-time">{formatTimestamp(message.timestamp)}</td>
-                        </tr>
-                      );
-                    })}
+                    {messageSections.map((section) => (
+                      <React.Fragment key={section.id}>
+                        {section.isGrouped && (
+                          <tr className="message-group-row">
+                            <td colSpan={3}>
+                              <button
+                                className="message-group-header"
+                                onClick={() => toggleGroupCollapse(section.id)}
+                              >
+                                <span className={`message-group-arrow ${collapsedGroups[section.id] ? "collapsed" : ""}`} />
+                                <span className="message-group-title">{section.title}</span>
+                                {section.displayValue && (
+                                  <span className="message-group-display-value">{section.displayValue}</span>
+                                )}
+                                <span className="message-group-count">{section.messages.length}</span>
+                              </button>
+                            </td>
+                          </tr>
+                        )}
+                        {(!section.isGrouped || !collapsedGroups[section.id]) &&
+                          section.messages.map((message, index) =>
+                            renderMessageRow(message, `${section.id}-${index}`)
+                          )}
+                      </React.Fragment>
+                    ))}
                   </tbody>
                 </table>
               </div>
