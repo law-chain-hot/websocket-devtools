@@ -443,7 +443,7 @@ const MessageDetails = ({
   return (
     <div className="message-details">
       <div className="messages-container">
-        <PanelGroup key={layoutDirection} direction={layoutDirection}>
+        <PanelGroup direction={layoutDirection}>
           <Panel
             defaultSize={
               selectedMessageKey ? (isHorizontal ? 55 : 70) : 100

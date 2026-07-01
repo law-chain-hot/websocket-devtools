@@ -473,7 +473,10 @@ const JsonViewer = ({
   useEffect(() => {
     const handleKeyDown = (e) => {
       const isFindShortcut =
-        (e.ctrlKey || e.metaKey) && !e.altKey && (e.key === "f" || e.key === "F");
+        (e.ctrlKey || e.metaKey) &&
+        !e.altKey &&
+        !e.shiftKey &&
+        e.key.toLowerCase() === "f";
       if (!isFindShortcut) return;
 
       const root = rootRef.current;
