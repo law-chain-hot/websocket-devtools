@@ -183,7 +183,7 @@
   "jsonViewer.tooltips.nestedParseJson": "Verschachteltes JSON analysieren",
   "jsonViewer.tooltips.noNestedData": "Keine verschachtelten JSON-Daten gefunden",
   "jsonViewer.tooltips.copy": "Kopieren",
-  "jsonViewer.tooltips.search": "Suchen (Strg+F)",
+  "jsonViewer.tooltips.search": "Suchen (Strg/Cmd + F)",
   "jsonViewer.tooltips.copied": "Kopiert!",
   "jsonViewer.tooltips.addToFavorites": "Zu Favoriten hinzufügen",
   "jsonViewer.tooltips.simulate": "Diese Nachricht simulieren",
