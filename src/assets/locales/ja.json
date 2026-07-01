@@ -182,6 +182,7 @@
   "jsonViewer.tooltips.nestedParseJson": "ネストしたJSONを解析",
   "jsonViewer.tooltips.noNestedData": "ネストしたJSONデータが見つかりません",
   "jsonViewer.tooltips.copy": "コピー",
+  "jsonViewer.tooltips.search": "検索 (Ctrl+F)",
   "jsonViewer.tooltips.copied": "コピーしました！",
   "jsonViewer.tooltips.addToFavorites": "お気に入りに追加",
   "jsonViewer.tooltips.simulate": "このメッセージをシミュレート",

@@ -180,6 +180,7 @@
   "jsonViewer.tooltips.nestedParseJson": "嵌套解析 JSON",
   "jsonViewer.tooltips.noNestedData": "未发现嵌套 JSON 数据",
   "jsonViewer.tooltips.copy": "复制",
+  "jsonViewer.tooltips.search": "搜索 (Ctrl+F)",
   "jsonViewer.tooltips.copied": "已复制！",
   "jsonViewer.tooltips.addToFavorites": "添加到收藏",
   "jsonViewer.tooltips.simulate": "模拟此消息",

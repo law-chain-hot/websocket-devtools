@@ -180,6 +180,7 @@
   "jsonViewer_tooltips_nestedParseJson": "jsonViewer.tooltips.nestedParseJson",
   "jsonViewer_tooltips_noNestedData": "jsonViewer.tooltips.noNestedData",
   "jsonViewer_tooltips_copy": "jsonViewer.tooltips.copy",
+  "jsonViewer_tooltips_search": "jsonViewer.tooltips.search",
   "jsonViewer_tooltips_copied": "jsonViewer.tooltips.copied",
   "jsonViewer_tooltips_addToFavorites": "jsonViewer.tooltips.addToFavorites",
   "jsonViewer_tooltips_simulate": "jsonViewer.tooltips.simulate",

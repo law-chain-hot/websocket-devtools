@@ -723,6 +723,10 @@
     "message": "复制",
     "description": "Translation for jsonViewer.tooltips.copy"
   },
+  "jsonViewer_tooltips_search": {
+    "message": "搜索 (Ctrl+F)",
+    "description": "Translation for jsonViewer.tooltips.search"
+  },
   "jsonViewer_tooltips_copied": {
     "message": "已复制！",
     "description": "Translation for jsonViewer.tooltips.copied"

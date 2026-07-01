@@ -184,6 +184,7 @@
   "jsonViewer.tooltips.nestedParseJson": "Analyser le JSON imbriqué",
   "jsonViewer.tooltips.noNestedData": "Aucune donnée JSON imbriquée trouvée",
   "jsonViewer.tooltips.copy": "Copier",
+  "jsonViewer.tooltips.search": "Rechercher (Ctrl+F)",
   "jsonViewer.tooltips.copied": "Copié !",
   "jsonViewer.tooltips.addToFavorites": "Ajouter aux favoris",
   "jsonViewer.tooltips.simulate": "Simuler ce message",

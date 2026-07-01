@@ -185,6 +185,7 @@
   "jsonViewer.tooltips.nestedParseJson": "중첩된 JSON 파싱",
   "jsonViewer.tooltips.noNestedData": "중첩된 JSON 데이터를 찾을 수 없습니다",
   "jsonViewer.tooltips.copy": "복사",
+  "jsonViewer.tooltips.search": "검색 (Ctrl+F)",
   "jsonViewer.tooltips.copied": "복사됨!",
   "jsonViewer.tooltips.addToFavorites": "즐겨찾기에 추가",
   "jsonViewer.tooltips.simulate": "이 메시지 시뮬레이션",

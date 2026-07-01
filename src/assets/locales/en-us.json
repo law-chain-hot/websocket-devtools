@@ -180,6 +180,7 @@
   "jsonViewer.tooltips.nestedParseJson": "Nested Parse JSON",
   "jsonViewer.tooltips.noNestedData": "No nested JSON data found",
   "jsonViewer.tooltips.copy": "Copy",
+  "jsonViewer.tooltips.search": "Search (Ctrl+F)",
   "jsonViewer.tooltips.copied": "Copied!",
   "jsonViewer.tooltips.addToFavorites": "Add to Favorites",
   "jsonViewer.tooltips.simulate": "Simulate this message",

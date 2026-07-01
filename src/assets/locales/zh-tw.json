@@ -181,6 +181,7 @@
   "jsonViewer.tooltips.nestedParseJson": "巢狀解析 JSON",
   "jsonViewer.tooltips.noNestedData": "未發現巢狀 JSON 資料",
   "jsonViewer.tooltips.copy": "複製",
+  "jsonViewer.tooltips.search": "搜尋 (Ctrl+F)",
   "jsonViewer.tooltips.copied": "已複製！",
   "jsonViewer.tooltips.addToFavorites": "新增到收藏",
   "jsonViewer.tooltips.simulate": "模擬此訊息",

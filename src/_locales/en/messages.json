@@ -723,6 +723,10 @@
     "message": "Copy",
     "description": "Translation for jsonViewer.tooltips.copy"
   },
+  "jsonViewer_tooltips_search": {
+    "message": "Search (Ctrl+F)",
+    "description": "Translation for jsonViewer.tooltips.search"
+  },
   "jsonViewer_tooltips_copied": {
     "message": "Copied!",
     "description": "Translation for jsonViewer.tooltips.copied"
