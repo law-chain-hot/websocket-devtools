@@ -423,6 +423,10 @@ const MessageDetails = ({
 
   const isHorizontal = layoutDirection === "horizontal";
 
+  // Resolve the selected message within the currently visible (filtered) list.
+  // When the active filter hides it, this is null and the detail panel must stay closed.
+  const selectedMessage = getSelectedMessage();
+
   // Detail panel visual style adapts to split direction (shadow/rounded corners face the list)
   const detailPanelStyle = isHorizontal
     ? {
@@ -446,7 +450,7 @@ const MessageDetails = ({
         <PanelGroup direction={layoutDirection}>
           <Panel
             defaultSize={
-              selectedMessageKey ? (isHorizontal ? 55 : 70) : 100
+              selectedMessage ? (isHorizontal ? 55 : 70) : 100
             }
             minSize={5}
           >
@@ -564,7 +568,7 @@ const MessageDetails = ({
             </div>
           </Panel>
 
-          {selectedMessageKey && (
+          {selectedMessage && (
               <>
                 <PanelResizeHandle className={resizeHandleClass} />
                 <Panel
@@ -576,9 +580,6 @@ const MessageDetails = ({
                   <div className="message-detail-simple" key={selectedConnectionId}>
                     <div className="detail-content">
                       {(() => {
-                        const selectedMessage = getSelectedMessage();
-                        if (!selectedMessage) return null;
-
                         const messageKey = selectedMessageKey;
                         return (
                           // <div className="detail-body">
