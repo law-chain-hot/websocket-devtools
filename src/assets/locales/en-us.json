@@ -198,6 +198,8 @@
   "messageDetails.controls.invert": "Invert",
   "messageDetails.controls.filterPlaceholder": "Filter messages by text content",
   "messageDetails.controls.clearMessages": "Clear all messages",
+  "messageDetails.controls.horizontalLayout": "Switch to left/right layout",
+  "messageDetails.controls.verticalLayout": "Switch to top/bottom layout",
   "messageDetails.table.data": "Data",
   "messageDetails.table.length": "Length",
   "messageDetails.table.time": "Time",

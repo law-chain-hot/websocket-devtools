@@ -199,6 +199,8 @@
   "messageDetails.controls.invert": "反向",
   "messageDetails.controls.filterPlaceholder": "按文字內容篩選訊息",
   "messageDetails.controls.clearMessages": "清空所有訊息",
+  "messageDetails.controls.horizontalLayout": "切換為左右佈局",
+  "messageDetails.controls.verticalLayout": "切換為上下佈局",
   "messageDetails.table.data": "資料",
   "messageDetails.table.length": "長度",
   "messageDetails.table.time": "時間",

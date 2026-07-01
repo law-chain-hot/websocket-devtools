@@ -198,6 +198,8 @@
   "messageDetails_controls_invert": "messageDetails.controls.invert",
   "messageDetails_controls_filterPlaceholder": "messageDetails.controls.filterPlaceholder",
   "messageDetails_controls_clearMessages": "messageDetails.controls.clearMessages",
+  "messageDetails_controls_horizontalLayout": "messageDetails.controls.horizontalLayout",
+  "messageDetails_controls_verticalLayout": "messageDetails.controls.verticalLayout",
   "messageDetails_table_data": "messageDetails.table.data",
   "messageDetails_table_length": "messageDetails.table.length",
   "messageDetails_table_time": "messageDetails.table.time",

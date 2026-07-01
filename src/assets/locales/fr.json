@@ -202,6 +202,8 @@
   "messageDetails.controls.invert": "Inverser",
   "messageDetails.controls.filterPlaceholder": "Filtrer les messages par contenu textuel",
   "messageDetails.controls.clearMessages": "Effacer tous les messages",
+  "messageDetails.controls.horizontalLayout": "Passer en disposition gauche/droite",
+  "messageDetails.controls.verticalLayout": "Passer en disposition haut/bas",
   "messageDetails.table.data": "Données",
   "messageDetails.table.length": "Longueur",
   "messageDetails.table.time": "Heure",

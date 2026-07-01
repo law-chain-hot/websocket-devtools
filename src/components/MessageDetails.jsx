@@ -4,7 +4,7 @@ import { filterMessages } from "../utils/filterUtils";
 import JsonViewer from "./JsonViewer";
 import useNewMessageHighlight from "../hooks/useNewMessageHighlight";
 import { addFromMessageList } from "../utils/globalFavorites";
-import { Ban, Search, Settings, CircleX } from "lucide-react";
+import { Ban, Search, Settings, CircleX, Columns2, Rows2 } from "lucide-react";
 import { t } from "../utils/i18n.js";
 import CheeseIcon from "../Icons/cheese.jsx";
 import ProtobufIcon from "../Icons/Protobuf.jsx";
@@ -76,6 +76,16 @@ const MessageDetails = ({
   const [copiedMessageKey, setCopiedMessageKey] = useState(null); // Copied message key
   const [sortOrder, setSortOrder] = useState("desc"); // 'asc' | 'desc' time sorting
   const [hoveredMessageKey, setHoveredMessageKey] = useState(null); // Hovered message key
+  // Split layout direction: 'vertical' (list on top, detail below) | 'horizontal' (list left, detail right)
+  const [layoutDirection, setLayoutDirection] = useState(() => {
+    try {
+      return localStorage.getItem("websocket-message-layout") === "horizontal"
+        ? "horizontal"
+        : "vertical";
+    } catch {
+      return "vertical";
+    }
+  });
 
   
   // Use new message highlight hook
@@ -213,6 +223,19 @@ const MessageDetails = ({
 
   const handleSortToggle = () => {
     setSortOrder(sortOrder === "desc" ? "asc" : "desc");
+  };
+
+  // Toggle between vertical (top/bottom) and horizontal (left/right) split layout
+  const handleToggleLayout = () => {
+    setLayoutDirection((prev) => {
+      const next = prev === "vertical" ? "horizontal" : "vertical";
+      try {
+        localStorage.setItem("websocket-message-layout", next);
+      } catch {
+        // ignore persistence failures (e.g. storage disabled)
+      }
+      return next;
+    });
   };
 
   const truncateMessage = (message, maxLength = 120) => {
@@ -398,70 +421,106 @@ const MessageDetails = ({
     );
   };
 
+  const isHorizontal = layoutDirection === "horizontal";
+
+  // Detail panel visual style adapts to split direction (shadow/rounded corners face the list)
+  const detailPanelStyle = isHorizontal
+    ? {
+        boxShadow: "rgba(21, 21, 21, 0.81) -5px 0px 20px 20px",
+        borderTopLeftRadius: "20px",
+        borderBottomLeftRadius: "20px",
+      }
+    : {
+        boxShadow: "rgba(21, 21, 21, 0.81) 0px -5px 20px 20px",
+        borderTopLeftRadius: "20px",
+        borderTopRightRadius: "20px",
+      };
+
+  const resizeHandleClass = `panel-resize-handle ${
+    isHorizontal ? "vertical" : "horizontal"
+  } message-detail-resize-handle`;
+
   return (
     <div className="message-details">
-      <div className="details-header">
-        <div className="connection-info">
-          <span className="connection-badge" title={connection.url}>{connection.url}</span>
-        </div>
-        <div className="controls">
-          <div className="control-row">
-            <div className="filter-controls direction-filter">
-              <select value={filterDirection} onChange={(e) => setFilterDirection(e.target.value)}>
-                <option value="all">{t("messageDetails.controls.all")}</option>
-                <option value="outgoing">{t("messageDetails.controls.send")}</option>
-                <option value="incoming">{t("messageDetails.controls.receive")}</option>
-              </select>
-            </div>
-            <div className="filter-controls search-filter">
-              <div className="filter-input-container">
-                <span className="filter-icon">
-                  <Search size={12} />
-                </span>
-                <input
-                  type="text"
-                  value={filterText}
-                  onChange={(e) => setFilterText(e.target.value)}
-                  placeholder={t("messageDetails.controls.filterPlaceholder")}
-                />
-                {filterText && (
-                  <button className="clear-filter-btn" onClick={handleClearSearchFilter}>
-                    <CircleX size={12} />
-                  </button>
-                )}
-              </div>
-            </div>
-            <label className="invert-checkbox">
-              <input type="checkbox" checked={filterInvert} onChange={(e) => setFilterInvert(e.target.checked)} />
-              <span className="checkmark"></span>
-              <span className="checkbox-label">{t("messageDetails.controls.invert")}</span>
-            </label>
-            <button
-              className="clear-messages-btn"
-              onClick={handleClearMessagesList}
-              disabled={!connection || !connection.messages || connection.messages.length === 0}
-              title={t("messageDetails.controls.clearMessages")}
-            >
-              <Ban size={14} />
-            </button>
-          </div>
-        </div>
-      </div>
-
       <div className="messages-container">
-        {sortedMessages.length === 0 ? (
-          <div className="empty-state">
-            <p>{t("messageDetails.emptyState.noMessages")}</p>
-          </div>
-        ) : (
-          <PanelGroup direction="vertical">
-            <Panel defaultSize={selectedMessageKey ? 70 : 100} minSize={5}>
-              <div 
-                className="messages-table-container" 
-                tabIndex={0}
-                style={{ outline: 'none' }}
-              >
-                <table className="ws-messages-table">
+        <PanelGroup key={layoutDirection} direction={layoutDirection}>
+          <Panel
+            defaultSize={
+              selectedMessageKey ? (isHorizontal ? 55 : 70) : 100
+            }
+            minSize={5}
+          >
+            <div className="message-list-pane">
+              <div className="details-header">
+                <div className="connection-info">
+                  <span className="connection-badge" title={connection.url}>{connection.url}</span>
+                </div>
+                <div className="controls">
+                  <div className="control-row">
+                    <div className="filter-controls direction-filter">
+                      <select value={filterDirection} onChange={(e) => setFilterDirection(e.target.value)}>
+                        <option value="all">{t("messageDetails.controls.all")}</option>
+                        <option value="outgoing">{t("messageDetails.controls.send")}</option>
+                        <option value="incoming">{t("messageDetails.controls.receive")}</option>
+                      </select>
+                    </div>
+                    <div className="filter-controls search-filter">
+                      <div className="filter-input-container">
+                        <span className="filter-icon">
+                          <Search size={12} />
+                        </span>
+                        <input
+                          type="text"
+                          value={filterText}
+                          onChange={(e) => setFilterText(e.target.value)}
+                          placeholder={t("messageDetails.controls.filterPlaceholder")}
+                        />
+                        {filterText && (
+                          <button className="clear-filter-btn" onClick={handleClearSearchFilter}>
+                            <CircleX size={12} />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    <label className="invert-checkbox">
+                      <input type="checkbox" checked={filterInvert} onChange={(e) => setFilterInvert(e.target.checked)} />
+                      <span className="checkmark"></span>
+                      <span className="checkbox-label">{t("messageDetails.controls.invert")}</span>
+                    </label>
+                    <button
+                      className="layout-toggle-btn"
+                      onClick={handleToggleLayout}
+                      title={
+                        isHorizontal
+                          ? t("messageDetails.controls.verticalLayout")
+                          : t("messageDetails.controls.horizontalLayout")
+                      }
+                    >
+                      {isHorizontal ? <Rows2 size={14} /> : <Columns2 size={14} />}
+                    </button>
+                    <button
+                      className="clear-messages-btn"
+                      onClick={handleClearMessagesList}
+                      disabled={!connection || !connection.messages || connection.messages.length === 0}
+                      title={t("messageDetails.controls.clearMessages")}
+                    >
+                      <Ban size={14} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {sortedMessages.length === 0 ? (
+                <div className="empty-state">
+                  <p>{t("messageDetails.emptyState.noMessages")}</p>
+                </div>
+              ) : (
+                <div
+                  className="messages-table-container"
+                  tabIndex={0}
+                  style={{ outline: 'none' }}
+                >
+                  <table className="ws-messages-table">
                   <thead>
                     <tr>
                       <th className="col-data">{t("messageDetails.table.data")}</th>
@@ -499,22 +558,20 @@ const MessageDetails = ({
                       );
                     })}
                   </tbody>
-                </table>
-              </div>
-            </Panel>
+                    </table>
+                  </div>
+                )}
+            </div>
+          </Panel>
 
-            {selectedMessageKey && (
+          {selectedMessageKey && (
               <>
-                <PanelResizeHandle className="panel-resize-handle horizontal message-detail-resize-handle" />
+                <PanelResizeHandle className={resizeHandleClass} />
                 <Panel
-                  defaultSize={50}
+                  defaultSize={isHorizontal ? 45 : 50}
                   minSize={10}
                   maxSize={95}
-                  style={{
-                    boxShadow: "rgba(21, 21, 21, 0.81) 0px -5px 20px 20px",
-                    borderTopLeftRadius: "20px",
-                    borderTopRightRadius: "20px",
-                  }}
+                  style={detailPanelStyle}
                 >
                   <div className="message-detail-simple" key={selectedConnectionId}>
                     <div className="detail-content">
@@ -570,8 +627,7 @@ const MessageDetails = ({
                 </Panel>
               </>
             )}
-          </PanelGroup>
-        )}
+        </PanelGroup>
       </div>
     </div>
   );

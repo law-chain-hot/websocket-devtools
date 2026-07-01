@@ -795,6 +795,14 @@
     "message": "清空所有消息",
     "description": "Translation for messageDetails.controls.clearMessages"
   },
+  "messageDetails_controls_horizontalLayout": {
+    "message": "切换为左右布局",
+    "description": "Translation for messageDetails.controls.horizontalLayout"
+  },
+  "messageDetails_controls_verticalLayout": {
+    "message": "切换为上下布局",
+    "description": "Translation for messageDetails.controls.verticalLayout"
+  },
   "messageDetails_table_data": {
     "message": "数据",
     "description": "Translation for messageDetails.table.data"

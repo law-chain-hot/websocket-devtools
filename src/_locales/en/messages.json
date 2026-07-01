@@ -795,6 +795,14 @@
     "message": "Clear all messages",
     "description": "Translation for messageDetails.controls.clearMessages"
   },
+  "messageDetails_controls_horizontalLayout": {
+    "message": "Switch to left/right layout",
+    "description": "Translation for messageDetails.controls.horizontalLayout"
+  },
+  "messageDetails_controls_verticalLayout": {
+    "message": "Switch to top/bottom layout",
+    "description": "Translation for messageDetails.controls.verticalLayout"
+  },
   "messageDetails_table_data": {
     "message": "Data",
     "description": "Translation for messageDetails.table.data"

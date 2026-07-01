@@ -203,6 +203,8 @@
   "messageDetails.controls.invert": "반전",
   "messageDetails.controls.filterPlaceholder": "텍스트 내용으로 메시지 필터링",
   "messageDetails.controls.clearMessages": "모든 메시지 지우기",
+  "messageDetails.controls.horizontalLayout": "좌우 레이아웃으로 전환",
+  "messageDetails.controls.verticalLayout": "상하 레이아웃으로 전환",
   "messageDetails.table.data": "데이터",
   "messageDetails.table.length": "길이",
   "messageDetails.table.time": "시간",

@@ -1074,3 +1074,68 @@
   box-shadow: 0px 1px 7px 4px rgb(0 0 0 / 21%);
   pointer-events: none;
 }
+
+/* Left/right split: list pane wraps header + table, detail sits in a side panel */
+.message-list-pane {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.message-list-pane .messages-table-container {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+}
+
+.message-list-pane .empty-state {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Layout direction toggle button in the header controls */
+.layout-toggle-btn {
+  padding: 2px 3px;
+  border: none;
+  border-radius: 2px;
+  background-color: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  height: 20px;
+  min-width: 20px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.layout-toggle-btn:hover {
+  background-color: var(--bg-secondary);
+  color: var(--accent-color);
+}
+
+/* Vertical divider used when the detail panel is placed on the right side */
+.message-detail-resize-handle.panel-resize-handle.vertical {
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: background-color 0.2s;
+  box-shadow: rgb(0 0 0 / 88%) -8px 0px 13px 1px;
+  position: relative;
+}
+
+.message-detail-resize-handle.panel-resize-handle.vertical::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -5px;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.838);
+  opacity: 0.7;
+  box-shadow: 1px 0px 7px 4px rgb(0 0 0 / 21%);
+  pointer-events: none;
+}
