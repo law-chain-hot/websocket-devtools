@@ -6,9 +6,10 @@
 
 <!-- <img src="./ScreenShot/Promo_Tile-1.png" alt="WebSocket DevTools" width="30%"> -->
 
+
 # WebSocket DevTools
 
-专业的 WebSocket 调试工具，提供监控、消息模拟和流量拦截等功能
+<a href="https://trendshift.io/repositories/20987?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-20987" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/20987/daily?language=JavaScript" alt="law-chain-hot%2Fwebsocket-devtools | Trendshift" width="250" height="55"/></a>
 
 Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking capabilities
 
