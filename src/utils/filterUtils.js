@@ -20,15 +20,24 @@ export const filterMessages = (messages, filters) => {
 
         // Text content filter
         if (text.trim()) {
-          const messageContent = msg.data.toLowerCase();
-          const filterText = text.toLowerCase();
-          const matchesText = messageContent.includes(filterText);
+          // If user provided a regex in the form /pattern/flags, use it.
+          // Otherwise, fall back to case-insensitive substring matching (previous behavior).
+          const regex = parseRegexFromFilter(text);
+          let matchesText;
+
+          if (regex) {
+            matchesText = regex.test(msg.data);
+          } else {
+            const messageContent = msg.data.toLowerCase();
+            const filterText = text.toLowerCase();
+            matchesText = messageContent.includes(filterText);
+          }
 
           // Apply invert logic
           if (invert) {
-            return !matchesText; // Show messages that DON'T contain the text
+            return !matchesText; // Show messages that DON'T contain the text / match the regex
           } else {
-            return matchesText; // Show messages that DO contain the text
+            return matchesText; // Show messages that DO contain the text / match the regex
           }
         }
 
@@ -66,13 +75,49 @@ export const filterConnections = (connections, filters) => {
     return connections;
   }
 
-  const filterText = text.toLowerCase();
+  const regex = parseRegexFromFilter(text);
+  const matchesRegex = (value) => {
+    regex.lastIndex = 0;
+    return regex.test(value);
+  };
 
   return connections.filter((conn) => {
+    if (regex) {
+      const matches = matchesRegex(conn.url) || matchesRegex(conn.id);
+      return invert ? !matches : matches;
+    }
+
+    const filterText = text.toLowerCase();
     const urlMatches = conn.url.toLowerCase().includes(filterText);
     const idMatches = conn.id.toLowerCase().includes(filterText);
     const matches = urlMatches || idMatches;
 
     return invert ? !matches : matches;
   });
+};
+
+/**
+ * Try to parse a regex from a filter string using the form /pattern/flags.
+ * If parsing fails or the string isn't in regex form, returns null.
+ * If no flags are provided, defaults to case-insensitive ("i") to preserve previous behavior.
+ * @param {string} text
+ * @returns {RegExp|null}
+ */
+const parseRegexFromFilter = (text) => {
+  if (!text || !text.startsWith("/")) return null;
+  const lastSlash = text.lastIndexOf("/");
+  if (lastSlash === 0) return null; // no pattern
+
+  const pattern = text.slice(1, lastSlash);
+  let flags = text.slice(lastSlash + 1);
+
+  // Default to case-insensitive if the user did not provide any flags
+  if (!flags) flags = "i";
+
+  try {
+    return new RegExp(pattern, flags);
+  } catch (e) {
+    // Invalid regex — fall back to substring matching
+    return null;
+  }
 };
