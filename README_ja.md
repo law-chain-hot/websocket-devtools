@@ -112,6 +112,12 @@
 - ✅ **オープンソース** - 完全に透明で監査可能なコード
 - ✅ **最小限の権限** - 機能に必要なもののみ
 
+## 🤝 コントリビューションとサポート
+
+- Pull Requestを作成する前に [CONTRIBUTING.md](./CONTRIBUTING.md) を確認してください
+- バグ報告や機能提案は [GitHub Issues](https://github.com/law-chain-hot/websocket-devtools/issues/new/choose) を利用してください
+- 脆弱性は [SECURITY.md](./SECURITY.md) の手順に従って非公開で報告してください
+
 ## 🛠 動作環境
 
 - **Chrome 88+** またはChromiumベースのブラウザ（Edge、Braveなど）
