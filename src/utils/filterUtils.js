@@ -76,10 +76,14 @@ export const filterConnections = (connections, filters) => {
   }
 
   const regex = parseRegexFromFilter(text);
+  const matchesRegex = (value) => {
+    regex.lastIndex = 0;
+    return regex.test(value);
+  };
 
   return connections.filter((conn) => {
     if (regex) {
-      const matches = regex.test(conn.url) || regex.test(conn.id);
+      const matches = matchesRegex(conn.url) || matchesRegex(conn.id);
       return invert ? !matches : matches;
     }
 
