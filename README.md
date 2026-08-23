@@ -120,6 +120,12 @@ Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking
 - ✅ **Open source** - Fully transparent and auditable code
 - ✅ **Minimal permissions** - Only what's needed for functionality
 
+## 🤝 Contributing & Support
+
+- Read [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a pull request
+- Use [GitHub Issues](https://github.com/law-chain-hot/websocket-devtools/issues/new/choose) for bugs and feature requests
+- Follow [SECURITY.md](./SECURITY.md) to report a vulnerability privately
+
 ---
 
 <img src="./ScreenShot/ScreenShot-long.png" alt="Main Interface" width="100%" style="border-radius: 8px;">

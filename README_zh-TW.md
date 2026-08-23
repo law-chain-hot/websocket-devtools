@@ -112,6 +112,12 @@
 - ✅ **開源程式碼** - 完全透明且可稽核的程式碼
 - ✅ **最小權限** - 僅請求功能所需的權限
 
+## 🤝 貢獻與支援
+
+- 提交 Pull Request 前請先閱讀 [CONTRIBUTING.md](./CONTRIBUTING.md)
+- Bug 和功能建議請透過 [GitHub Issues](https://github.com/law-chain-hot/websocket-devtools/issues/new/choose) 提交
+- 安全漏洞請依照 [SECURITY.md](./SECURITY.md) 私下回報
+
 ## 🛠 系統需求
 
 - **Chrome 88+** 或基於Chromium的瀏覽器 (Edge, Brave等)
