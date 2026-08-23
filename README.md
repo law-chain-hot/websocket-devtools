@@ -52,7 +52,7 @@ Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=law-chain-hot/websocket-devtools&type=Date)](https://www.star-history.com/#law-chain-hot/websocket-devtools&Date)
+[![Star History Chart](https://star-history.dera.page/svg?repos=law-chain-hot/websocket-devtools&type=Date)](https://star-history.dera.page/#law-chain-hot/websocket-devtools&Date)
 
 ## ✨ Key Features
 
