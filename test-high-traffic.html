@@ -26,6 +26,14 @@
       margin-bottom: 20px;
       color: #10b981;
     }
+    .test-guide {
+      color: #cbd5e1;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .test-guide strong {
+      color: #fbbf24;
+    }
     .card {
       background: rgba(30, 41, 59, 0.8);
       border-radius: 12px;
@@ -183,6 +191,12 @@
 <body>
   <div class="container">
     <h1>WebSocket High Traffic Test</h1>
+
+    <div class="card test-guide">
+      <strong>How to use:</strong> Open this page, open the WebSocket DevTools panel,
+      connect to an echo server, and start with a low-rate preset. The default endpoint
+      is a third-party test service and can be replaced with your own WebSocket server.
+    </div>
 
     <div class="card">
       <h2>Connection</h2>
