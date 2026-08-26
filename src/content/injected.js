@@ -18,6 +18,18 @@
   let connectionIdCounter = 0;
   const connections = new Map();
 
+  // Match native event dispatch: surface callback errors without stopping later listeners.
+  function reportUserCallbackError(error) {
+    if (typeof window.reportError === "function") {
+      window.reportError(error);
+      return;
+    }
+
+    queueMicrotask(() => {
+      throw error;
+    });
+  }
+
   // Binary Detection and Decoding Utilities
   function isBinaryData(data) {
     try {
@@ -587,6 +599,7 @@
             try {
               connectionInfo.userOnMessage.call(ws, simulatedEvent);
             } catch (error) {
+              reportUserCallbackError(error);
             }
           }
           
@@ -594,6 +607,7 @@
             try {
               listener.call(ws, simulatedEvent);
             } catch (error) {
+              reportUserCallbackError(error);
             }
           });
           
@@ -653,6 +667,7 @@
               try {
                 ws.onclose.call(ws, closeEvent);
               } catch (error) {
+                reportUserCallbackError(error);
               }
             }
 
@@ -710,6 +725,7 @@
             try {
               ws.onclose.call(ws, closeEvent);
             } catch (error) {
+              reportUserCallbackError(error);
             }
           }
 
@@ -753,6 +769,7 @@
             try {
               ws.onerror.call(ws, errorEvent);
             } catch (error) {
+              reportUserCallbackError(error);
             }
           }
 
@@ -835,6 +852,7 @@
           try {
             connectionInfo.userOnMessage.call(ws, event);
           } catch (error) {
+            reportUserCallbackError(error);
           }
         }
         
@@ -842,6 +860,7 @@
           try {
             listener.call(ws, event);
           } catch (error) {
+            reportUserCallbackError(error);
           }
         });
         
@@ -904,6 +923,7 @@
         try {
           connectionInfo.userOnMessage.call(ws, event);
         } catch (error) {
+          reportUserCallbackError(error);
         }
       }
       
@@ -911,6 +931,7 @@
         try {
           listener.call(ws, event);
         } catch (error) {
+          reportUserCallbackError(error);
         }
       });
     };
