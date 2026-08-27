@@ -202,7 +202,7 @@ const Popup = () => {
 
       {/* Footer */}
       <div style={styles.footer}>
-        <span style={styles.versionText}>v1.0.8</span>
+        <span style={styles.versionText}>v1.0.9</span>
         <div style={styles.footerIcons}>
 
           <div className="tooltip-container">
