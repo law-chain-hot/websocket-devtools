@@ -107,6 +107,12 @@
 - ✅ **开源代码** - 完全透明且可审计的代码
 - ✅ **最小权限** - 仅请求功能所需的权限
 
+## 🤝 贡献与支持
+
+- 提交 Pull Request 前请先阅读 [CONTRIBUTING.md](./CONTRIBUTING.md)
+- Bug 和功能建议请通过 [GitHub Issues](https://github.com/law-chain-hot/websocket-devtools/issues/new/choose) 提交
+- 安全漏洞请按照 [SECURITY.md](./SECURITY.md) 私下报告
+
 ## 🛠 系统要求
 
 - **Chrome 88+** 或基于Chromium的浏览器 (Edge, Brave等)
@@ -125,7 +131,7 @@
 
 </div> 
 
-[version-shield]: https://img.shields.io/badge/version-1.0.6-55b467?labelColor=black&logo=github&style=flat-square
+[version-shield]: https://img.shields.io/badge/version-1.0.8-55b467?labelColor=black&logo=github&style=flat-square
 [license-shield]: https://img.shields.io/badge/license-MIT-369eff?labelColor=black&logo=opensourceinitiative&style=flat-square
 [chrome-shield]: https://img.shields.io/badge/Chrome%20Web%20Store-Install-ffcb47?labelColor=black&logo=googlechrome&logoColor=white&style=flat-square
 [privacy-shield]: https://img.shields.io/badge/privacy-local%20only-c4f042?labelColor=black&logo=shield-check&style=flat-square

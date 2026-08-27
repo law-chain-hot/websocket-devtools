@@ -112,6 +112,12 @@
 - ✅ **オープンソース** - 完全に透明で監査可能なコード
 - ✅ **最小限の権限** - 機能に必要なもののみ
 
+## 🤝 コントリビューションとサポート
+
+- Pull Requestを作成する前に [CONTRIBUTING.md](./CONTRIBUTING.md) を確認してください
+- バグ報告や機能提案は [GitHub Issues](https://github.com/law-chain-hot/websocket-devtools/issues/new/choose) を利用してください
+- 脆弱性は [SECURITY.md](./SECURITY.md) の手順に従って非公開で報告してください
+
 ## 🛠 動作環境
 
 - **Chrome 88+** またはChromiumベースのブラウザ（Edge、Braveなど）
@@ -130,7 +136,7 @@
 
 </div> 
 
-[version-shield]: https://img.shields.io/badge/version-1.0.6-55b467?labelColor=black&logo=github&style=flat-square
+[version-shield]: https://img.shields.io/badge/version-1.0.8-55b467?labelColor=black&logo=github&style=flat-square
 [license-shield]: https://img.shields.io/badge/license-MIT-369eff?labelColor=black&logo=opensourceinitiative&style=flat-square
 [chrome-shield]: https://img.shields.io/badge/Chrome%20Web%20Store-Install-ffcb47?labelColor=black&logo=googlechrome&logoColor=white&style=flat-square
 [privacy-shield]: https://img.shields.io/badge/privacy-local%20only-c4f042?labelColor=black&logo=shield-check&style=flat-square

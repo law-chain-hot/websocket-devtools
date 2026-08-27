@@ -6,9 +6,10 @@
 
 <!-- <img src="./ScreenShot/Promo_Tile-1.png" alt="WebSocket DevTools" width="30%"> -->
 
+
 # WebSocket DevTools
 
-专业的 WebSocket 调试工具，提供监控、消息模拟和流量拦截等功能
+<a href="https://trendshift.io/repositories/20987?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-20987" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/20987/daily?language=JavaScript" alt="law-chain-hot%2Fwebsocket-devtools | Trendshift" width="250" height="55"/></a>
 
 Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking capabilities
 
@@ -51,7 +52,7 @@ Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=law-chain-hot/websocket-devtools&type=Date)](https://www.star-history.com/#law-chain-hot/websocket-devtools&Date)
+[![Star History Chart](https://star-history.dera.page/svg?repos=law-chain-hot/websocket-devtools&type=Date)](https://star-history.dera.page/#law-chain-hot/websocket-devtools&Date)
 
 ## ✨ Key Features
 
@@ -119,6 +120,12 @@ Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking
 - ✅ **Open source** - Fully transparent and auditable code
 - ✅ **Minimal permissions** - Only what's needed for functionality
 
+## 🤝 Contributing & Support
+
+- Read [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a pull request
+- Use [GitHub Issues](https://github.com/law-chain-hot/websocket-devtools/issues/new/choose) for bugs and feature requests
+- Follow [SECURITY.md](./SECURITY.md) to report a vulnerability privately
+
 ---
 
 <img src="./ScreenShot/ScreenShot-long.png" alt="Main Interface" width="100%" style="border-radius: 8px;">
@@ -131,7 +138,7 @@ Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking
 
 </div> 
 
-[version-shield]: https://img.shields.io/badge/version-1.0.6-55b467?labelColor=black&logo=github&style=flat-square
+[version-shield]: https://img.shields.io/badge/version-1.0.8-55b467?labelColor=black&logo=github&style=flat-square
 [license-shield]: https://img.shields.io/badge/license-MIT-369eff?labelColor=black&logo=opensourceinitiative&style=flat-square
 [chrome-shield]: https://img.shields.io/badge/Chrome%20Web%20Store-Install-ffcb47?labelColor=black&logo=googlechrome&logoColor=white&style=flat-square
 [privacy-shield]: https://img.shields.io/badge/privacy-local%20only-c4f042?labelColor=black&logo=shield-check&style=flat-square
