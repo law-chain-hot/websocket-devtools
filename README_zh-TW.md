@@ -40,6 +40,14 @@
 2. 點擊 **"取得"** 並確認安裝
 3. 開啟開發者工具 (F12) → **"WebSocket DevTools"** 分頁
 
+### 從 GitHub 手動安裝
+1. 下載[最新 GitHub Release](https://github.com/law-chain-hot/websocket-devtools/releases/latest)中附帶的 ZIP 檔案
+2. 解壓縮 ZIP 檔案
+3. 開啟 `chrome://extensions` 或 `edge://extensions`
+4. 開啟**開發人員模式**，選擇**載入未封裝項目**，然後選取解壓縮後的資料夾
+
+> 手動安裝不會自動更新，請透過 Releases 頁面取得新版本。
+
 ### 官網
 
 - 🌐 [WebSocket DevTools](https://websocket-devtools.com) - 官方網站

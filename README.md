@@ -45,6 +45,14 @@ Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking
 2. Click **"Get"** and confirm installation
 3. Open DevTools (F12) → **"WebSocket DevTools"** tab
 
+### Manual installation from GitHub
+1. Download the ZIP attached to the [latest GitHub Release](https://github.com/law-chain-hot/websocket-devtools/releases/latest)
+2. Extract the ZIP
+3. Open `chrome://extensions` or `edge://extensions`
+4. Enable **Developer mode**, choose **Load unpacked**, and select the extracted folder
+
+> Manual installations do not update automatically. Check the Releases page for newer versions.
+
 ### Homepage
 
 - 🌐 [WebSocket DevTools](https://websocket-devtools.com) - Official website with documentation and demos 
