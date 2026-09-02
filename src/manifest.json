@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "WebSocket DevTools",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Professional WebSocket debugging tool with message proxying, simulation, blocking and favorites features",
   "author": "Brian Luo",
   "homepage_url": "https://github.com/law-chain-hot/websocket-devtools",
@@ -45,7 +45,7 @@
   ],
 
   "action": {
-    "default_title": "WebSocket Proxy Pro - Monitor & Debug WebSocket Connections",
+    "default_title": "WebSocket DevTools - Monitor & Debug WebSocket Connections",
     "default_popup": "src/popup/popup.html",
     "default_icon": {
       "16": "icons/icon-small.png",
