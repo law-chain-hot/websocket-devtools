@@ -723,6 +723,10 @@
     "message": "Copy",
     "description": "Translation for jsonViewer.tooltips.copy"
   },
+  "jsonViewer_tooltips_search": {
+    "message": "Search (Ctrl+F)",
+    "description": "Translation for jsonViewer.tooltips.search"
+  },
   "jsonViewer_tooltips_copied": {
     "message": "Copied!",
     "description": "Translation for jsonViewer.tooltips.copied"
@@ -794,6 +798,14 @@
   "messageDetails_controls_clearMessages": {
     "message": "Clear all messages",
     "description": "Translation for messageDetails.controls.clearMessages"
+  },
+  "messageDetails_controls_horizontalLayout": {
+    "message": "Switch to left/right layout",
+    "description": "Translation for messageDetails.controls.horizontalLayout"
+  },
+  "messageDetails_controls_verticalLayout": {
+    "message": "Switch to top/bottom layout",
+    "description": "Translation for messageDetails.controls.verticalLayout"
   },
   "messageDetails_table_data": {
     "message": "Data",
