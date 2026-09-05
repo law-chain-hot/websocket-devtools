@@ -3,6 +3,8 @@ import { createRoot } from "react-dom/client";
 import i18n, { t, initForPopup } from "../utils/i18n.js";
 import { Settings, Zap, Activity, Power, Wifi, MonitorSpeaker, MessageCircle, Send, Ban, SquareActivity, Home, Heart, Github } from "lucide-react";
 
+const extensionVersion = chrome.runtime.getManifest().version;
+
 const Popup = () => {
   const [isEnabled, setIsEnabled] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -202,7 +204,7 @@ const Popup = () => {
 
       {/* Footer */}
       <div style={styles.footer}>
-        <span style={styles.versionText}>v1.0.11</span>
+        <span style={styles.versionText}>v{extensionVersion}</span>
         <div style={styles.footerIcons}>
 
           <div className="tooltip-container">

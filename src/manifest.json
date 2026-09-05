@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "WebSocket DevTools",
-  "version": "1.0.11",
+  "version": "1.2.0",
   "description": "Professional WebSocket debugging tool with message proxying, simulation, blocking and favorites features",
   "author": "Brian Luo",
   "homepage_url": "https://github.com/law-chain-hot/websocket-devtools",

@@ -1,6 +1,6 @@
 {
   "name": "websocket-devtools",
-  "version": "1.0.11",
+  "version": "1.2.0",
   "description": "Professional debugging tool with real-time monitoring, message simulation, and traffic interception for developers",
   "type": "module",
   "main": "index.js",
