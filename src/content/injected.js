@@ -17,6 +17,7 @@
 
   let connectionIdCounter = 0;
   const connections = new Map();
+  const CLIENT_CLOSE_FALLBACK_MS = 5000;
 
   // Match native event dispatch: surface callback errors without stopping later listeners.
   function reportUserCallbackError(error) {
@@ -495,8 +496,8 @@
   }
 
   // Send event to content script (buffered)
-  function sendEvent(eventData) {
-    if(!proxyState.isMonitoring){
+  function sendEvent(eventData, force = false) {
+    if(!proxyState.isMonitoring && !force){
       return;
     }
 
@@ -618,6 +619,12 @@
     }
   }
 
+  function clearClientCloseFallback(connectionInfo) {
+    if (!connectionInfo.closeFallbackTimer) return;
+    clearTimeout(connectionInfo.closeFallbackTimer);
+    connectionInfo.closeFallbackTimer = null;
+  }
+
   // Handle simulated system event
   function handleSimulateSystemEvent(connectionId, eventData) {
 
@@ -672,6 +679,7 @@
             }
 
             // Send system event to extension
+            connectionInfo.closeEventReported = true;
             sendEvent({
               id: connectionId,
               url: connectionInfo.url,
@@ -683,7 +691,7 @@
               simulated: true,
               systemEventType: "client-close", // Keep original intention
               messageId: generateMessageId(),
-            });
+            }, true);
 
             // Clean up connection
             connections.delete(connectionId);
@@ -691,18 +699,41 @@
           }
           
           connectionInfo.isSimulatingClose = true; // Set flag
-          
           try {
             // Call original WebSocket's close method
             // This will trigger the native WebSocket close handshake, and the browser will naturally emit a 'close' event,
             // which our proxy's 'close' event listener will capture and process.
             connectionInfo.originalClose.call(ws, requestedCode, requestedReason);
+            connectionInfo.status = "closing";
+            connectionInfo.closeFallbackTimer = setTimeout(() => {
+              connectionInfo.closeFallbackTimer = null;
+              if (connectionInfo.status !== "closing") return;
+
+              connectionInfo.status = "closed";
+              connectionInfo.isSimulatingClose = false;
+              connectionInfo.closeEventReported = true;
+              sendEvent({
+                id: connectionId,
+                url: connectionInfo.url,
+                type: "close",
+                data: `Client Close Timeout: Code: ${requestedCode}, Reason: ${requestedReason}`,
+                direction: "system",
+                timestamp: Date.now(),
+                status: "closed",
+                simulated: true,
+                systemEventType: "client-close",
+                messageId: generateMessageId(),
+              }, true);
+              connections.delete(connectionId);
+            }, CLIENT_CLOSE_FALLBACK_MS);
           } catch (error) {
+            connectionInfo.isSimulatingClose = false;
           }
 
           break;
 
         case "server-close":
+          clearClientCloseFallback(connectionInfo);
           
           // Create simulated CloseEvent
           const closeEvent = new CloseEvent("close", {
@@ -747,6 +778,7 @@
 
         case "client-error":
         case "server-error":
+          clearClientCloseFallback(connectionInfo);
           
           // Create simulated ErrorEvent
           const errorEvent = new ErrorEvent("error", {
@@ -824,6 +856,8 @@
       messageQueue: [], // Message queue during pause
       blockedMessages: [], // Blocked messages
       isSimulatingClose: false, // New: for marking if client-initiated close is being simulated
+      closeFallbackTimer: null,
+      closeEventReported: false,
     };
 
     connections.set(connectionId, connectionInfo);
@@ -1035,6 +1069,12 @@
     ["open", "close", "error"].forEach((eventType) => {
       connectionInfo.originalAddEventListener(eventType, (event) => {
 
+        if (eventType === "close") clearClientCloseFallback(connectionInfo);
+        if (eventType === "close" && connectionInfo.closeEventReported) {
+          return;
+        }
+        const forceEvent = eventType === "close" && connectionInfo.isSimulatingClose;
+
         // Update connection status
         if (eventType === "open") {
           connectionInfo.status = "open";
@@ -1085,7 +1125,10 @@
             }
         }
         
-        sendEvent(payload);
+        if (eventType === "close") {
+          connectionInfo.closeEventReported = true;
+        }
+        sendEvent(payload, forceEvent);
 
         if (eventType === "close") {
           connections.delete(connectionId);
