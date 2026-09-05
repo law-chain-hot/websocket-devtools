@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => ({
     react(),
     webExtension({
       manifest: "./src/manifest.json",
+      skipManifestValidation: true,
       watchFilePaths: ["src/**/*"],
       additionalInputs: [
         "src/content/injected.js",
