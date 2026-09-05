@@ -61,7 +61,10 @@ class NonResponsiveWebSocket {
 
   send() {}
 
-  close() {
+  close(_code, reason = "") {
+    if (Buffer.byteLength(reason, "utf8") > 123) {
+      throw new SyntaxError("Close reason exceeds 123 bytes");
+    }
     this.readyState = NonResponsiveWebSocket.CLOSING;
   }
 
@@ -99,11 +102,22 @@ async function createHarness() {
     vm.createContext({
       ArrayBuffer,
       Blob,
-      CloseEvent: class CloseEvent {},
+      CloseEvent: class CloseEvent {
+        constructor(type, details = {}) {
+          this.type = type;
+          Object.assign(this, details);
+        }
+      },
       Date,
       JSON,
       Map,
       Math,
+      ErrorEvent: class ErrorEvent {
+        constructor(type, details = {}) {
+          this.type = type;
+          Object.assign(this, details);
+        }
+      },
       MessageEvent: class MessageEvent {},
       TextDecoder,
       URL,
@@ -200,4 +214,62 @@ test("reports a requested client close while monitoring is stopped", async () =>
     .filter((event) => event.id === socket._connectionId && event.type === "close");
   assert.equal(closeEvents.length, 1);
   assert.equal(closeEvents[0].status, "closed");
+});
+
+test("keeps the connection open when the native close request is rejected", async () => {
+  const harness = await createHarness();
+  const socket = new harness.fakeWindow.WebSocket("wss://example.com/socket");
+  socket.emit("open");
+  harness.clock.runUntil(100);
+  harness.postedMessages.length = 0;
+
+  harness.sendControlMessage({
+    source: "websocket-proxy-content",
+    type: "simulate-system-event",
+    connectionId: socket._connectionId,
+    eventType: "client-close",
+    code: 1000,
+    reason: "x".repeat(124),
+  });
+  harness.clock.runUntil(10_000);
+
+  const closeEvents = harness.postedMessages
+    .filter((message) => message.type === "websocket-event-batch")
+    .flatMap((message) => message.payload)
+    .filter((event) => event.id === socket._connectionId && event.type === "close");
+  assert.equal(socket.readyState, NonResponsiveWebSocket.OPEN);
+  assert.equal(closeEvents.length, 0);
+});
+
+test("does not report a close timeout after the connection reaches an error state", async () => {
+  const harness = await createHarness();
+  const socket = new harness.fakeWindow.WebSocket("wss://example.com/socket");
+  socket.emit("open");
+  harness.clock.runUntil(100);
+  harness.postedMessages.length = 0;
+
+  harness.sendControlMessage({
+    source: "websocket-proxy-content",
+    type: "simulate-system-event",
+    connectionId: socket._connectionId,
+    eventType: "client-close",
+    code: 1000,
+    reason: "Closed by user",
+  });
+  harness.sendControlMessage({
+    source: "websocket-proxy-content",
+    type: "simulate-system-event",
+    connectionId: socket._connectionId,
+    eventType: "server-error",
+    code: "EUNEXPECTED",
+    message: "Connection failed while closing",
+  });
+  harness.clock.runUntil(10_000);
+
+  const events = harness.postedMessages
+    .filter((message) => message.type === "websocket-event-batch")
+    .flatMap((message) => message.payload)
+    .filter((event) => event.id === socket._connectionId);
+  assert.equal(events.filter((event) => event.type === "error").length, 1);
+  assert.equal(events.filter((event) => event.type === "close").length, 0);
 });
