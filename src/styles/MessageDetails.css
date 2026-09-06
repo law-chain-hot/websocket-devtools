@@ -90,6 +90,11 @@
   flex-wrap: wrap;
 }
 
+.group-control-row {
+  gap: 8px;
+  padding-top: 2px;
+}
+
 .filter-controls {
   display: flex;
   align-items: center;
@@ -212,6 +217,49 @@
 .invert-checkbox .checkbox-label {
   font-weight: 400;
   color: var(--text-secondary);
+}
+
+.group-enable-checkbox {
+  flex-shrink: 0;
+}
+
+.group-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.filter-controls.group-field-filter input {
+  width: 120px;
+  padding: 2px 6px !important;
+}
+
+.filter-controls.group-value-filter input {
+  width: 130px;
+  padding: 2px 6px !important;
+}
+
+.filter-controls.group-display-field-filter input {
+  width: 120px;
+  padding: 2px 6px !important;
+}
+
+.filter-controls.group-sort-filter select {
+  width: 120px;
+}
+
+.filter-controls.group-field-filter input:disabled,
+.filter-controls.group-value-filter input:disabled,
+.filter-controls.group-display-field-filter input:disabled,
+.filter-controls.group-sort-filter select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.group-help-text {
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 20px;
 }
 
 .filter-input-container {
@@ -389,6 +437,80 @@
 .ws-messages-table td.col-time {
   text-align: right;
   color: var(--text-secondary);
+}
+
+.message-group-row td {
+  padding: 0;
+  height: 26px;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.message-group-header {
+  width: 100%;
+  height: 26px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 11px;
+}
+
+.message-group-header:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.message-group-arrow {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--text-secondary);
+  transition: transform 0.12s ease;
+  flex-shrink: 0;
+}
+
+.message-group-arrow.collapsed {
+  transform: rotate(-90deg);
+}
+
+.message-group-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.message-group-display-value {
+  min-width: 0;
+  max-width: 40%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.message-group-count {
+  margin-left: auto;
+  min-width: 20px;
+  height: 16px;
+  border-radius: 8px;
+  background-color: rgba(59, 130, 246, 0.18);
+  color: #60a5fa;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  font-size: 10px;
+  font-weight: 600;
 }
 
 .message-row {
