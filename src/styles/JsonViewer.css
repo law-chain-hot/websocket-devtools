@@ -120,6 +120,15 @@
   stroke: #c4b5fd;
 }
 
+.json-viewer-action-buttons .json-viewer-btn.btn-search:hover {
+  background: #172a3a;
+  color: #60a5fa;
+}
+.json-viewer-action-buttons .json-viewer-btn.btn-search:hover svg {
+  color: #60a5fa;
+  stroke: #60a5fa;
+}
+
 /* Animated buttons that appear on first simulate click in JsonViewer */
 .json-viewer-animated-buttons {
   display: flex;
@@ -613,4 +622,86 @@
 .json-viewer-codemirror .cm-searchMatch-selected {
   background-color: rgba(255, 193, 7, 0.6);
   border: 1px solid rgba(255, 193, 7, 0.9);
+}
+
+/* Native search panel (opened via toolbar button or Ctrl/Cmd+F) */
+.json-viewer-codemirror .cm-panels {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.json-viewer-codemirror .cm-panels.cm-panels-top {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.json-viewer-codemirror .cm-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px 32px 6px 8px;
+  font-size: 12px;
+}
+
+.json-viewer-codemirror .cm-search .cm-textfield {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  padding: 3px 6px;
+  font-size: 12px;
+  outline: none;
+}
+
+.json-viewer-codemirror .cm-search .cm-textfield:focus {
+  border-color: var(--accent-color);
+}
+
+.json-viewer-codemirror .cm-search .cm-button {
+  background: var(--bg-tertiary);
+  background-image: none;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  padding: 3px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.json-viewer-codemirror .cm-search .cm-button:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--accent-color);
+}
+
+.json-viewer-codemirror .cm-search label {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.json-viewer-codemirror .cm-panel.cm-search [name="close"] {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.json-viewer-codemirror .cm-panel.cm-search [name="close"]:hover {
+  color: var(--danger-color);
 }

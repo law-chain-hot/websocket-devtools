@@ -1,9 +1,10 @@
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import React, { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { json } from "@codemirror/lang-json";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { EditorView } from "@codemirror/view";
 import { EditorState } from "@codemirror/state";
+import { search, openSearchPanel } from "@codemirror/search";
 import Protobuf from "../Icons/Protobuf";
 
 const deepEqual = (a, b) => {
@@ -36,7 +37,8 @@ import {
   Send,
   Layers2,
   Check,
-  Info
+  Info,
+  Search
 } from "lucide-react";
 import { t } from "../utils/i18n.js";
 import "../styles/JsonViewer.css";
@@ -453,9 +455,49 @@ const JsonViewer = ({
 
   const content = getDisplayContent();
 
+  // References for programmatic actions (search) and focus-scoped shortcut handling
+  const cmRef = useRef(null);
+  const rootRef = useRef(null);
+
+  // Open CodeMirror's native search panel (also reachable via Ctrl/Cmd+F)
+  const handleOpenSearch = useCallback(() => {
+    const view = cmRef.current?.view;
+    if (view) {
+      openSearchPanel(view);
+      view.focus();
+    }
+  }, []);
+
+  // Intercept Ctrl/Cmd+F when focus is inside this viewer so the CodeMirror
+  // search panel opens instead of the browser's native find bar.
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const isFindShortcut =
+        (e.ctrlKey || e.metaKey) &&
+        !e.altKey &&
+        !e.shiftKey &&
+        e.key.toLowerCase() === "f";
+      if (!isFindShortcut) return;
+
+      const root = rootRef.current;
+      const view = cmRef.current?.view;
+      if (!root || !view) return;
+
+      if (root.contains(document.activeElement)) {
+        e.preventDefault();
+        e.stopPropagation();
+        openSearchPanel(view);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown, true);
+    return () => document.removeEventListener("keydown", handleKeyDown, true);
+  }, []);
+
   // CodeMirror extensions configuration
   const extensions = [
     isValidJson ? json() : [],
+    search({ top: true }),
     EditorView.theme({
       "&": {
         fontSize: "12px",
@@ -493,12 +535,13 @@ const JsonViewer = ({
       },
     }),
     textWrap ? EditorView.lineWrapping : [],
-    EditorView.editable.of(!readOnly),
+    // Keep the view focusable even when read-only so it can hold a cursor and
+    // Ctrl/Cmd+F search + text selection work; EditorState.readOnly blocks edits.
     EditorState.readOnly.of(readOnly),
   ].filter(Boolean);
 
   return (
-    <div className={`json-viewer ${className}`}>
+    <div className={`json-viewer ${className}`} ref={rootRef}>
       {showControls && (
         <div className="json-viewer-controls">
           <div className="json-viewer-controls-left">
@@ -586,6 +629,15 @@ const JsonViewer = ({
           <div className="json-viewer-controls-right">
             {/* Action buttons */}
             <div className="json-viewer-action-buttons">
+              {/* Search button - opens CodeMirror native search panel */}
+              <button
+                onClick={handleOpenSearch}
+                className="json-viewer-btn btn-search json-viewer-btn-inactive"
+                title={t("jsonViewer.tooltips.search") || "Search (Ctrl+F)"}
+              >
+                <Search size={14} />
+              </button>
+
               {/* Simulate button */}
               {onSimulate && (
                 <button
@@ -657,6 +709,7 @@ const JsonViewer = ({
 
       <div className="json-viewer-container">
         <CodeMirror
+          ref={cmRef}
           value={content}
           onChange={handleChange}
           extensions={extensions}
