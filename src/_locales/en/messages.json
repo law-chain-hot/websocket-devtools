@@ -675,6 +675,26 @@
     "message": "中文",
     "description": "Translation for language.names.zh-cn"
   },
+  "language_names_zh_tw": {
+    "message": "繁體中文",
+    "description": "Translation for language.names.zh-tw"
+  },
+  "language_names_ja": {
+    "message": "日本語",
+    "description": "Translation for language.names.ja"
+  },
+  "language_names_de": {
+    "message": "Deutsch",
+    "description": "Translation for language.names.de"
+  },
+  "language_names_fr": {
+    "message": "Français",
+    "description": "Translation for language.names.fr"
+  },
+  "language_names_ko": {
+    "message": "한국어",
+    "description": "Translation for language.names.ko"
+  },
   "jsonViewer_controls_wrap": {
     "message": "Wrap",
     "description": "Translation for jsonViewer.controls.wrap"
@@ -794,6 +814,62 @@
   "messageDetails_controls_clearMessages": {
     "message": "Clear all messages",
     "description": "Translation for messageDetails.controls.clearMessages"
+  },
+  "messageDetails_grouping_enable": {
+    "message": "Group",
+    "description": "Translation for messageDetails.grouping.enable"
+  },
+  "messageDetails_grouping_field": {
+    "message": "Field",
+    "description": "Translation for messageDetails.grouping.field"
+  },
+  "messageDetails_grouping_value": {
+    "message": "Value",
+    "description": "Translation for messageDetails.grouping.value"
+  },
+  "messageDetails_grouping_displayField": {
+    "message": "Display",
+    "description": "Translation for messageDetails.grouping.displayField"
+  },
+  "messageDetails_grouping_tooltip": {
+    "message": "Group messages by a JSON field and optional exact value",
+    "description": "Translation for messageDetails.grouping.tooltip"
+  },
+  "messageDetails_grouping_emptyValueHint": {
+    "message": "Leave value empty to group by every value",
+    "description": "Translation for messageDetails.grouping.emptyValueHint"
+  },
+  "messageDetails_grouping_other": {
+    "message": "Other messages",
+    "description": "Translation for messageDetails.grouping.other"
+  },
+  "messageDetails_grouping_noField": {
+    "message": "No {{field}}",
+    "description": "Translation for messageDetails.grouping.noField"
+  },
+  "messageDetails_grouping_sort": {
+    "message": "Sort",
+    "description": "Translation for messageDetails.grouping.sort"
+  },
+  "messageDetails_grouping_sort_firstOutgoing": {
+    "message": "First sent",
+    "description": "Translation for messageDetails.grouping.sort.firstOutgoing"
+  },
+  "messageDetails_grouping_sort_firstMessage": {
+    "message": "First message",
+    "description": "Translation for messageDetails.grouping.sort.firstMessage"
+  },
+  "messageDetails_grouping_sort_latestMessage": {
+    "message": "Latest message",
+    "description": "Translation for messageDetails.grouping.sort.latestMessage"
+  },
+  "messageDetails_grouping_sort_groupValue": {
+    "message": "Group value",
+    "description": "Translation for messageDetails.grouping.sort.groupValue"
+  },
+  "messageDetails_grouping_sort_messageCount": {
+    "message": "Message count",
+    "description": "Translation for messageDetails.grouping.sort.messageCount"
   },
   "messageDetails_table_data": {
     "message": "Data",

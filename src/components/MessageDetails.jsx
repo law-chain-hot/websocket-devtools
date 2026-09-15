@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { filterMessages } from "../utils/filterUtils";
 import JsonViewer from "./JsonViewer";
 import useNewMessageHighlight from "../hooks/useNewMessageHighlight";
 import { addFromMessageList } from "../utils/globalFavorites";
-import { Ban, Search, Settings, CircleX } from "lucide-react";
+import { Ban, Search, Settings, CircleX, ListTree } from "lucide-react";
 import { t } from "../utils/i18n.js";
+import {
+  buildMessageSections,
+  createMessageGroupingCache,
+} from "../utils/messageGrouping.js";
 import CheeseIcon from "../Icons/cheese.jsx";
 import ProtobufIcon from "../Icons/Protobuf.jsx";
 
@@ -76,6 +80,63 @@ const MessageDetails = ({
   const [copiedMessageKey, setCopiedMessageKey] = useState(null); // Copied message key
   const [sortOrder, setSortOrder] = useState("desc"); // 'asc' | 'desc' time sorting
   const [hoveredMessageKey, setHoveredMessageKey] = useState(null); // Hovered message key
+  const [groupEnabled, setGroupEnabled] = useState(false);
+  const [groupField, setGroupField] = useState("requestID");
+  const [groupValue, setGroupValue] = useState("");
+  const [groupDisplayField, setGroupDisplayField] = useState("");
+  const [groupSortMode, setGroupSortMode] = useState("firstOutgoing");
+  const [collapsedGroups, setCollapsedGroups] = useState({});
+  const groupingCacheRef = useRef(createMessageGroupingCache());
+  const sortedMessages = useMemo(() => {
+    const filteredMessages = filterMessages(connection?.messages || [], {
+      direction: filterDirection,
+      text: filterText,
+      invert: filterInvert,
+    });
+
+    return [...filteredMessages].sort((a, b) => {
+      return sortOrder === "desc"
+        ? b.timestamp - a.timestamp
+        : a.timestamp - b.timestamp;
+    });
+  }, [
+    connection?.messages,
+    filterDirection,
+    filterText,
+    filterInvert,
+    sortOrder,
+  ]);
+
+  const groupOtherTitle = t("messageDetails.grouping.other");
+  const missingGroupFieldTitle = t("messageDetails.grouping.noField", {
+    field: groupField.trim(),
+  });
+  // UI-only state changes such as hover or collapse reuse the same sections.
+  const messageSections = useMemo(
+    () =>
+      buildMessageSections({
+        sortedMessages,
+        groupEnabled,
+        groupField,
+        groupValue,
+        groupDisplayField,
+        groupSortMode,
+        otherTitle: groupOtherTitle,
+        missingFieldTitle: missingGroupFieldTitle,
+        cache: groupingCacheRef.current,
+      }),
+    [
+      sortedMessages,
+      groupEnabled,
+      groupField,
+      groupValue,
+      groupDisplayField,
+      groupSortMode,
+      groupOtherTitle,
+      missingGroupFieldTitle,
+    ]
+  );
+
 
   
   // Use new message highlight hook
@@ -93,22 +154,7 @@ const MessageDetails = ({
   // Keyboard navigation for message selection
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Only handle arrow keys when we have connection and messages
-      if (!connection || !connection.messages || connection.messages.length === 0) return;
-      
-      // Calculate filtered and sorted messages inside the effect
-      const filteredMessages = filterMessages(connection.messages, {
-        direction: filterDirection,
-        text: filterText,
-        invert: filterInvert,
-      });
-      
-      const sortedMessages = [...filteredMessages].sort((a, b) => {
-        return sortOrder === "desc"
-          ? b.timestamp - a.timestamp
-          : a.timestamp - b.timestamp;
-      });
-      
+      // Only handle arrow keys when there are visible messages
       if (sortedMessages.length === 0) return;
       
       const tableContainer = document.querySelector('.messages-table-container');
@@ -165,7 +211,7 @@ const MessageDetails = ({
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [connection, filterDirection, filterText, filterInvert, sortOrder, selectedMessageKey]);
+  }, [sortedMessages, selectedMessageKey]);
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -188,20 +234,6 @@ const MessageDetails = ({
       </div>
     );
   }
-
-  // First use the original filterMessages to filter direction/text
-  let filteredMessages = filterMessages(connection.messages, {
-    direction: filterDirection,
-    text: filterText,
-    invert: filterInvert,
-  });
-
-  // Sort messages
-  const sortedMessages = [...filteredMessages].sort((a, b) => {
-    return sortOrder === "desc"
-      ? b.timestamp - a.timestamp
-      : a.timestamp - b.timestamp;
-  });
 
   // formatMessage function has been moved to the JsonViewer component for internal handling
 
@@ -256,6 +288,13 @@ const MessageDetails = ({
   const getMessageLength = (message) => {
     if (message.type !== "message") return "-";
     return message.data ? message.data.length : 0;
+  };
+
+  const toggleGroupCollapse = (groupId) => {
+    setCollapsedGroups((previous) => ({
+      ...previous,
+      [groupId]: !previous[groupId],
+    }));
   };
 
   // Copy message content to clipboard
@@ -398,6 +437,34 @@ const MessageDetails = ({
     );
   };
 
+  const renderMessageRow = (message, index) => {
+    const messageKey = message.messageId;
+    const isSelected = selectedMessageKey === messageKey;
+    const isNewMsg = isNewMessage(messageKey);
+    const isHovered = hoveredMessageKey === messageKey;
+
+    return (
+      <tr
+        key={`${messageKey}-${index}`}
+        data-message-id={messageKey}
+        className={`message-row ${message.direction} ${message.simulated ? "simulated" : ""} ${
+          message.blocked ? "blocked" : ""
+        } ${isSelected ? "selected" : ""} ${isNewMsg ? "new-message" : ""} ${
+          isHovered ? "hovered" : ""
+        }`}
+        onClick={() => handleMessageClick(messageKey)}
+        onMouseEnter={() => setHoveredMessageKey(messageKey)}
+        onMouseLeave={() => setHoveredMessageKey(null)}
+      >
+        <td className="col-data">
+          <div className="data-cell-wrapper">{renderDataCell(message)}</div>
+        </td>
+        <td className="col-length">{getMessageLength(message)}</td>
+        <td className="col-time">{formatTimestamp(message.timestamp)}</td>
+      </tr>
+    );
+  };
+
   return (
     <div className="message-details">
       <div className="details-header">
@@ -445,6 +512,63 @@ const MessageDetails = ({
               <Ban size={14} />
             </button>
           </div>
+          <div className="control-row group-control-row">
+            <label className="invert-checkbox group-enable-checkbox" title={t("messageDetails.grouping.tooltip")}>
+              <input type="checkbox" checked={groupEnabled} onChange={(e) => setGroupEnabled(e.target.checked)} />
+              <span className="checkmark"></span>
+              <span className="checkbox-label group-checkbox-label">
+                <ListTree size={12} />
+                {t("messageDetails.grouping.enable")}
+              </span>
+            </label>
+            <div className="filter-controls group-field-filter">
+              <label>{t("messageDetails.grouping.field")}</label>
+              <input
+                type="text"
+                value={groupField}
+                onChange={(e) => setGroupField(e.target.value)}
+                placeholder="requestID"
+                disabled={!groupEnabled}
+              />
+            </div>
+            <div className="filter-controls group-value-filter">
+              <label>{t("messageDetails.grouping.value")}</label>
+              <input
+                type="text"
+                value={groupValue}
+                onChange={(e) => setGroupValue(e.target.value)}
+                placeholder="1000002"
+                disabled={!groupEnabled}
+              />
+            </div>
+            <div className="filter-controls group-display-field-filter">
+              <label>{t("messageDetails.grouping.displayField")}</label>
+              <input
+                type="text"
+                value={groupDisplayField}
+                onChange={(e) => setGroupDisplayField(e.target.value)}
+                placeholder="eventID"
+                disabled={!groupEnabled}
+              />
+            </div>
+            <div className="filter-controls group-sort-filter">
+              <label>{t("messageDetails.grouping.sort")}</label>
+              <select
+                value={groupSortMode}
+                onChange={(e) => setGroupSortMode(e.target.value)}
+                disabled={!groupEnabled}
+              >
+                <option value="firstOutgoing">{t("messageDetails.grouping.sort.firstOutgoing")}</option>
+                <option value="firstMessage">{t("messageDetails.grouping.sort.firstMessage")}</option>
+                <option value="latestMessage">{t("messageDetails.grouping.sort.latestMessage")}</option>
+                <option value="groupValue">{t("messageDetails.grouping.sort.groupValue")}</option>
+                <option value="messageCount">{t("messageDetails.grouping.sort.messageCount")}</option>
+              </select>
+            </div>
+            {groupEnabled && (
+              <span className="group-help-text">{t("messageDetails.grouping.emptyValueHint")}</span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -472,32 +596,31 @@ const MessageDetails = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {sortedMessages.map((message, index) => {
-                      const messageKey = message.messageId;
-                      const isSelected = selectedMessageKey === messageKey;
-                      const isNewMsg = isNewMessage(messageKey);
-                      const isHovered = hoveredMessageKey === messageKey;
-                      return (
-                        <tr
-                          key={`${messageKey}-${index}`} // Keep React key unique
-                          data-message-id={messageKey}
-                          className={`message-row ${message.direction} ${message.simulated ? "simulated" : ""} ${
-                            message.blocked ? "blocked" : ""
-                          } ${isSelected ? "selected" : ""} ${isNewMsg ? "new-message" : ""} ${
-                            isHovered ? "hovered" : ""
-                          }`}
-                          onClick={() => handleMessageClick(messageKey)}
-                          onMouseEnter={() => setHoveredMessageKey(messageKey)}
-                          onMouseLeave={() => setHoveredMessageKey(null)}
-                        >
-                          <td className="col-data">
-                            <div className="data-cell-wrapper">{renderDataCell(message)}</div>
-                          </td>
-                          <td className="col-length">{getMessageLength(message)}</td>
-                          <td className="col-time">{formatTimestamp(message.timestamp)}</td>
-                        </tr>
-                      );
-                    })}
+                    {messageSections.map((section) => (
+                      <React.Fragment key={section.id}>
+                        {section.isGrouped && (
+                          <tr className="message-group-row">
+                            <td colSpan={3}>
+                              <button
+                                className="message-group-header"
+                                onClick={() => toggleGroupCollapse(section.id)}
+                              >
+                                <span className={`message-group-arrow ${collapsedGroups[section.id] ? "collapsed" : ""}`} />
+                                <span className="message-group-title">{section.title}</span>
+                                {section.displayValue && (
+                                  <span className="message-group-display-value">{section.displayValue}</span>
+                                )}
+                                <span className="message-group-count">{section.messages.length}</span>
+                              </button>
+                            </td>
+                          </tr>
+                        )}
+                        {(!section.isGrouped || !collapsedGroups[section.id]) &&
+                          section.messages.map((message, index) =>
+                            renderMessageRow(message, `${section.id}-${index}`)
+                          )}
+                      </React.Fragment>
+                    ))}
                   </tbody>
                 </table>
               </div>

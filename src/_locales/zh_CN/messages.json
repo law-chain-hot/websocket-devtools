@@ -675,6 +675,26 @@
     "message": "中文",
     "description": "Translation for language.names.zh-cn"
   },
+  "language_names_zh_tw": {
+    "message": "繁體中文",
+    "description": "Translation for language.names.zh-tw"
+  },
+  "language_names_ja": {
+    "message": "日本語",
+    "description": "Translation for language.names.ja"
+  },
+  "language_names_de": {
+    "message": "Deutsch",
+    "description": "Translation for language.names.de"
+  },
+  "language_names_fr": {
+    "message": "Français",
+    "description": "Translation for language.names.fr"
+  },
+  "language_names_ko": {
+    "message": "한국어",
+    "description": "Translation for language.names.ko"
+  },
   "jsonViewer_controls_wrap": {
     "message": "自动换行",
     "description": "Translation for jsonViewer.controls.wrap"
@@ -794,6 +814,62 @@
   "messageDetails_controls_clearMessages": {
     "message": "清空所有消息",
     "description": "Translation for messageDetails.controls.clearMessages"
+  },
+  "messageDetails_grouping_enable": {
+    "message": "分组",
+    "description": "Translation for messageDetails.grouping.enable"
+  },
+  "messageDetails_grouping_field": {
+    "message": "字段",
+    "description": "Translation for messageDetails.grouping.field"
+  },
+  "messageDetails_grouping_value": {
+    "message": "值",
+    "description": "Translation for messageDetails.grouping.value"
+  },
+  "messageDetails_grouping_displayField": {
+    "message": "展示字段",
+    "description": "Translation for messageDetails.grouping.displayField"
+  },
+  "messageDetails_grouping_tooltip": {
+    "message": "按 JSON 字段和可选精确值对消息分组",
+    "description": "Translation for messageDetails.grouping.tooltip"
+  },
+  "messageDetails_grouping_emptyValueHint": {
+    "message": "值留空时按字段的所有取值分组",
+    "description": "Translation for messageDetails.grouping.emptyValueHint"
+  },
+  "messageDetails_grouping_other": {
+    "message": "其他消息",
+    "description": "Translation for messageDetails.grouping.other"
+  },
+  "messageDetails_grouping_noField": {
+    "message": "无 {{field}}",
+    "description": "Translation for messageDetails.grouping.noField"
+  },
+  "messageDetails_grouping_sort": {
+    "message": "排序",
+    "description": "Translation for messageDetails.grouping.sort"
+  },
+  "messageDetails_grouping_sort_firstOutgoing": {
+    "message": "首条发送",
+    "description": "Translation for messageDetails.grouping.sort.firstOutgoing"
+  },
+  "messageDetails_grouping_sort_firstMessage": {
+    "message": "首条消息",
+    "description": "Translation for messageDetails.grouping.sort.firstMessage"
+  },
+  "messageDetails_grouping_sort_latestMessage": {
+    "message": "最近消息",
+    "description": "Translation for messageDetails.grouping.sort.latestMessage"
+  },
+  "messageDetails_grouping_sort_groupValue": {
+    "message": "分组值",
+    "description": "Translation for messageDetails.grouping.sort.groupValue"
+  },
+  "messageDetails_grouping_sort_messageCount": {
+    "message": "消息数",
+    "description": "Translation for messageDetails.grouping.sort.messageCount"
   },
   "messageDetails_table_data": {
     "message": "数据",
