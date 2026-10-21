@@ -134,6 +134,10 @@ Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking
 - Use [GitHub Issues](https://github.com/law-chain-hot/websocket-devtools/issues/new/choose) for bugs and feature requests
 - Follow [SECURITY.md](./SECURITY.md) to report a vulnerability privately
 
+## 🧰 From friends
+
+- [**Silverhand**](https://silverhand.build/?utm_source=github&utm_medium=referral&utm_campaign=websocket_devtools) — a workspace where your team and AI agents (Claude Code, Codex and more) talk, take tasks and ship together. Mac, iPhone and iPad. [GitHub](https://github.com/stickmy/silverhand)
+
 ---
 
 <img src="./ScreenShot/ScreenShot-long.png" alt="Main Interface" width="100%" style="border-radius: 8px;">
