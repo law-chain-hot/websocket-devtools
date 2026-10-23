@@ -1,4 +1,12 @@
 {
+  "theme_switchToLight": {
+    "message": "ライトテーマに切り替え",
+    "description": "Translation for theme.switchToLight"
+  },
+  "theme_switchToDark": {
+    "message": "ダークテーマに切り替え",
+    "description": "Translation for theme.switchToDark"
+  },
   "app_title": {
     "message": "WebSocket DevTools",
     "description": "Translation for app.title"
@@ -803,6 +811,62 @@
     "message": "全てのメッセージをクリア",
     "description": "Translation for messageDetails.controls.clearMessages"
   },
+  "messageDetails_grouping_enable": {
+    "message": "グループ",
+    "description": "Translation for messageDetails.grouping.enable"
+  },
+  "messageDetails_grouping_field": {
+    "message": "フィールド",
+    "description": "Translation for messageDetails.grouping.field"
+  },
+  "messageDetails_grouping_value": {
+    "message": "値",
+    "description": "Translation for messageDetails.grouping.value"
+  },
+  "messageDetails_grouping_displayField": {
+    "message": "表示フィールド",
+    "description": "Translation for messageDetails.grouping.displayField"
+  },
+  "messageDetails_grouping_tooltip": {
+    "message": "JSON フィールドと任意の完全一致値でメッセージをグループ化",
+    "description": "Translation for messageDetails.grouping.tooltip"
+  },
+  "messageDetails_grouping_emptyValueHint": {
+    "message": "値を空にするとフィールドのすべての値でグループ化します",
+    "description": "Translation for messageDetails.grouping.emptyValueHint"
+  },
+  "messageDetails_grouping_other": {
+    "message": "その他のメッセージ",
+    "description": "Translation for messageDetails.grouping.other"
+  },
+  "messageDetails_grouping_noField": {
+    "message": "{{field}} なし",
+    "description": "Translation for messageDetails.grouping.noField"
+  },
+  "messageDetails_grouping_sort": {
+    "message": "並び替え",
+    "description": "Translation for messageDetails.grouping.sort"
+  },
+  "messageDetails_grouping_sort_firstOutgoing": {
+    "message": "最初の送信",
+    "description": "Translation for messageDetails.grouping.sort.firstOutgoing"
+  },
+  "messageDetails_grouping_sort_firstMessage": {
+    "message": "最初のメッセージ",
+    "description": "Translation for messageDetails.grouping.sort.firstMessage"
+  },
+  "messageDetails_grouping_sort_latestMessage": {
+    "message": "最新メッセージ",
+    "description": "Translation for messageDetails.grouping.sort.latestMessage"
+  },
+  "messageDetails_grouping_sort_groupValue": {
+    "message": "グループ値",
+    "description": "Translation for messageDetails.grouping.sort.groupValue"
+  },
+  "messageDetails_grouping_sort_messageCount": {
+    "message": "メッセージ数",
+    "description": "Translation for messageDetails.grouping.sort.messageCount"
+  },
   "messageDetails_table_data": {
     "message": "データ",
     "description": "Translation for messageDetails.table.data"
@@ -931,6 +995,14 @@
     "message": "貼り付け",
     "description": "Translation for common.paste"
   },
+  "common_rawData": {
+    "message": "生データ",
+    "description": "Translation for common.rawData"
+  },
+  "common_binary": {
+    "message": "バイナリ",
+    "description": "Translation for common.binary"
+  },
   "common_cut": {
     "message": "切り取り",
     "description": "Translation for common.cut"
@@ -1034,6 +1106,118 @@
   "simulate_animated_githubTooltip": {
     "message": "このプラグインが気に入ったら、このリポジトリをチェックしてみてください〜",
     "description": "Translation for simulate.animated.githubTooltip"
+  },
+  "jsonViewer_tooltips_search": {
+    "message": "検索 (Ctrl+F)",
+    "description": "Translation for jsonViewer.tooltips.search"
+  },
+  "messageDetails_controls_horizontalLayout": {
+    "message": "左右レイアウトに切り替え",
+    "description": "Translation for messageDetails.controls.horizontalLayout"
+  },
+  "messageDetails_controls_verticalLayout": {
+    "message": "上下レイアウトに切り替え",
+    "description": "Translation for messageDetails.controls.verticalLayout"
+  },
+  "messageDetails_projection_mode": {
+    "message": "表示モード",
+    "description": "Translation for messageDetails.projection.mode"
+  },
+  "messageDetails_projection_raw": {
+    "message": "生データ",
+    "description": "Translation for messageDetails.projection.raw"
+  },
+  "messageDetails_projection_field": {
+    "message": "指定フィールド",
+    "description": "Translation for messageDetails.projection.field"
+  },
+  "messageDetails_projection_path": {
+    "message": "フィールド",
+    "description": "Translation for messageDetails.projection.path"
+  },
+  "messageDetails_projection_apply": {
+    "message": "適用",
+    "description": "Translation for messageDetails.projection.apply"
+  },
+  "messageDetails_projection_clear": {
+    "message": "クリア",
+    "description": "Translation for messageDetails.projection.clear"
+  },
+  "messageDetails_projection_candidates": {
+    "message": "フィールド候補",
+    "description": "Translation for messageDetails.projection.candidates"
+  },
+  "messageDetails_projection_hideMissing": {
+    "message": "不一致のメッセージを非表示",
+    "description": "Translation for messageDetails.projection.hideMissing"
+  },
+  "messageDetails_projection_hideEmpty": {
+    "message": "空文字列を非表示",
+    "description": "Translation for messageDetails.projection.hideEmpty"
+  },
+  "messageDetails_projection_invalidPath": {
+    "message": "choices[0].message.content のような完全なパスを使用してください。",
+    "description": "Translation for messageDetails.projection.invalidPath"
+  },
+  "messageDetails_projection_count": {
+    "message": "表示 {{visible}} / {{total}}",
+    "description": "Translation for messageDetails.projection.count"
+  },
+  "messageDetails_projection_value": {
+    "message": "フィールド値",
+    "description": "Translation for messageDetails.projection.value"
+  },
+  "messageDetails_projection_noVisibleValues": {
+    "message": "このフィールドに表示可能な値はありません。",
+    "description": "Translation for messageDetails.projection.noVisibleValues"
+  },
+  "messageDetails_projection_showAll": {
+    "message": "不一致のメッセージを表示",
+    "description": "Translation for messageDetails.projection.showAll"
+  },
+  "messageDetails_projection_restoreRaw": {
+    "message": "生データに戻す",
+    "description": "Translation for messageDetails.projection.restoreRaw"
+  },
+  "messageDetails_projection_status_missing": {
+    "message": "フィールドがありません",
+    "description": "Translation for messageDetails.projection.status.missing"
+  },
+  "messageDetails_projection_status_invalidJson": {
+    "message": "JSON を解析できません",
+    "description": "Translation for messageDetails.projection.status.invalidJson"
+  },
+  "messageDetails_projection_status_unsupported": {
+    "message": "このメッセージ型は未対応です",
+    "description": "Translation for messageDetails.projection.status.unsupported"
+  },
+  "messageDetails_projection_status_notApplicable": {
+    "message": "該当なし",
+    "description": "Translation for messageDetails.projection.status.notApplicable"
+  },
+  "messageDetails_projection_status_empty": {
+    "message": "空文字列",
+    "description": "Translation for messageDetails.projection.status.empty"
+  },
+  "messageDetails_projection_status_whitespace": {
+    "message": "空白文字",
+    "description": "Translation for messageDetails.projection.status.whitespace"
+  },
+  "messageDetails_projection_expand": {
+    "message": "展開",
+    "description": "Translation for messageDetails.projection.expand"
+  },
+  "messageDetails_projection_collapse": {
+    "message": "折りたたむ",
+    "description": "Translation for messageDetails.projection.collapse"
+  },
+  "messageDetails_projection_searchRawTooltip": {
+    "message": "生のメッセージデータを検索",
+    "description": "Translation for messageDetails.projection.searchRawTooltip"
+  },
+  "messageDetails_projection_lengthTooltip": {
+    "message": "元のメッセージ文字数",
+    "description": "Translation for messageDetails.projection.lengthTooltip"
   },
   "extensionName": {
     "message": "WebSocket DevTools",

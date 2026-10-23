@@ -1,4 +1,12 @@
 {
+  "theme_switchToLight": {
+    "message": "切换到亮色主题",
+    "description": "Translation for theme.switchToLight"
+  },
+  "theme_switchToDark": {
+    "message": "切换到暗色主题",
+    "description": "Translation for theme.switchToDark"
+  },
   "app_title": {
     "message": "WebSocket DevTools",
     "description": "Translation for app.title"
@@ -1142,6 +1150,106 @@
   "messageDetails_controls_verticalLayout": {
     "message": "切换为上下布局",
     "description": "Translation for messageDetails.controls.verticalLayout"
+  },
+  "messageDetails_projection_mode": {
+    "message": "展示模式",
+    "description": "Translation for messageDetails.projection.mode"
+  },
+  "messageDetails_projection_raw": {
+    "message": "原始数据",
+    "description": "Translation for messageDetails.projection.raw"
+  },
+  "messageDetails_projection_field": {
+    "message": "指定字段",
+    "description": "Translation for messageDetails.projection.field"
+  },
+  "messageDetails_projection_path": {
+    "message": "字段",
+    "description": "Translation for messageDetails.projection.path"
+  },
+  "messageDetails_projection_apply": {
+    "message": "应用",
+    "description": "Translation for messageDetails.projection.apply"
+  },
+  "messageDetails_projection_clear": {
+    "message": "清除",
+    "description": "Translation for messageDetails.projection.clear"
+  },
+  "messageDetails_projection_candidates": {
+    "message": "字段候选",
+    "description": "Translation for messageDetails.projection.candidates"
+  },
+  "messageDetails_projection_hideMissing": {
+    "message": "隐藏未命中消息",
+    "description": "Translation for messageDetails.projection.hideMissing"
+  },
+  "messageDetails_projection_hideEmpty": {
+    "message": "隐藏空字符串",
+    "description": "Translation for messageDetails.projection.hideEmpty"
+  },
+  "messageDetails_projection_invalidPath": {
+    "message": "请使用 choices[0].message.content 形式的精确路径。",
+    "description": "Translation for messageDetails.projection.invalidPath"
+  },
+  "messageDetails_projection_count": {
+    "message": "显示 {{visible}} / {{total}}",
+    "description": "Translation for messageDetails.projection.count"
+  },
+  "messageDetails_projection_value": {
+    "message": "字段值",
+    "description": "Translation for messageDetails.projection.value"
+  },
+  "messageDetails_projection_noVisibleValues": {
+    "message": "当前字段没有可显示的值。",
+    "description": "Translation for messageDetails.projection.noVisibleValues"
+  },
+  "messageDetails_projection_showAll": {
+    "message": "显示未命中消息",
+    "description": "Translation for messageDetails.projection.showAll"
+  },
+  "messageDetails_projection_restoreRaw": {
+    "message": "恢复原始数据",
+    "description": "Translation for messageDetails.projection.restoreRaw"
+  },
+  "messageDetails_projection_status_missing": {
+    "message": "字段不存在",
+    "description": "Translation for messageDetails.projection.status.missing"
+  },
+  "messageDetails_projection_status_invalidJson": {
+    "message": "无法解析 JSON",
+    "description": "Translation for messageDetails.projection.status.invalidJson"
+  },
+  "messageDetails_projection_status_unsupported": {
+    "message": "暂不支持此消息类型",
+    "description": "Translation for messageDetails.projection.status.unsupported"
+  },
+  "messageDetails_projection_status_notApplicable": {
+    "message": "不适用",
+    "description": "Translation for messageDetails.projection.status.notApplicable"
+  },
+  "messageDetails_projection_status_empty": {
+    "message": "空字符串",
+    "description": "Translation for messageDetails.projection.status.empty"
+  },
+  "messageDetails_projection_status_whitespace": {
+    "message": "空白字符",
+    "description": "Translation for messageDetails.projection.status.whitespace"
+  },
+  "messageDetails_projection_expand": {
+    "message": "展开",
+    "description": "Translation for messageDetails.projection.expand"
+  },
+  "messageDetails_projection_collapse": {
+    "message": "收起",
+    "description": "Translation for messageDetails.projection.collapse"
+  },
+  "messageDetails_projection_searchRawTooltip": {
+    "message": "搜索原始消息数据",
+    "description": "Translation for messageDetails.projection.searchRawTooltip"
+  },
+  "messageDetails_projection_lengthTooltip": {
+    "message": "原始消息字符长度",
+    "description": "Translation for messageDetails.projection.lengthTooltip"
   },
   "extensionName": {
     "message": "WebSocket DevTools",

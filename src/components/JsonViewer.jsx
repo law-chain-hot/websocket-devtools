@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback, useEffect, useRef } from "react"
 import CodeMirror from "@uiw/react-codemirror";
 import { json } from "@codemirror/lang-json";
 import { oneDark } from "@codemirror/theme-one-dark";
+import { useTheme } from "../hooks/useTheme.js";
 import { EditorView } from "@codemirror/view";
 import { EditorState } from "@codemirror/state";
 import { search, openSearchPanel } from "@codemirror/search";
@@ -65,6 +66,7 @@ const JsonViewer = ({
   showSimulateNestedParseButton = false, // Control button specifically for Simulate Message
   onSimulateNestedParse = null, // Callback for Simulate Message specific nested parse
 }) => {
+  const colorScheme = useTheme();
   // Set initial wrap value based on content type: JSON defaults to no wrap, non-JSON defaults to wrap
   const [textWrap, setTextWrap] = useState(() => {
     // In read-only mode, auto wrap based on content type; in editable mode, default to no wrap
@@ -502,7 +504,7 @@ const JsonViewer = ({
       "&": {
         fontSize: "12px",
         height: "100%",
-        backgroundColor: "#262626", // Editor background color
+        backgroundColor: "var(--editor-background, #262626)",
       },
       ".cm-editor": {
         height: "100%",
@@ -524,8 +526,8 @@ const JsonViewer = ({
         minHeight: "100%",
       },
       ".cm-gutters": {
-        backgroundColor: "#333333", // Line number area background color
-        borderRight: "1px solid #404040",
+        backgroundColor: "var(--editor-gutter, #333333)",
+        borderRight: "1px solid var(--border-color)",
       },
       "&.cm-editor.cm-focused .cm-selectionBackground": {
         backgroundColor: "rgba(0, 122, 204, 0.3)",
@@ -713,7 +715,7 @@ const JsonViewer = ({
           value={content}
           onChange={handleChange}
           extensions={extensions}
-          theme={oneDark}
+          theme={colorScheme === "dark" ? oneDark : "light"}
           basicSetup={{
             lineNumbers: true,
             foldGutter: true,

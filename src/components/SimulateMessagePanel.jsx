@@ -510,7 +510,7 @@ const SimulateMessagePanel = forwardRef(
                         leftSection={
                           <Send
                             size={20}
-                            color={activeTab === "editor" ? "#2196f3" : "#b6b6b6"}
+                            color={activeTab === "editor" ? "var(--simulate-editor-icon, #2196f3)" : "var(--simulate-inactive-icon, #b6b6b6)"}
                             // color={"#2196f3"}
                             className="tab-icon"
                           />
@@ -521,7 +521,7 @@ const SimulateMessagePanel = forwardRef(
                         leftSection={
                           <Star
                             size={20}
-                            color={activeTab === "favorites" ? "#FFD600" : "#b6b6b6"}
+                            color={activeTab === "favorites" ? "var(--simulate-favorite-icon, #FFD600)" : "var(--simulate-inactive-icon, #b6b6b6)"}
                             // color={"#FFD600"}
                             className="tab-icon"
                           />
@@ -532,7 +532,7 @@ const SimulateMessagePanel = forwardRef(
                         leftSection={
                           <Wrench
                             size={20}
-                            color={activeTab === "system" ? "#cd7726" : "#b6b6b6"}
+                            color={activeTab === "system" ? "var(--simulate-system-icon, #cd7726)" : "var(--simulate-inactive-icon, #b6b6b6)"}
                             // color={"#e01210"}
                             className="tab-icon"
                           />

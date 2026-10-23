@@ -177,18 +177,18 @@ const ManualConnectModal = ({
                   openDelay={100}
                   styles={{
                     tooltip: {
-                      background: "rgba(30, 30, 30, 0.95)",
-                      color: "#f3f4f6",
-                      border: "1px solid rgba(255, 255, 255, 0.2)",
+                      background: "var(--tooltip-background, rgba(30, 30, 30, 0.95))",
+                      color: "var(--tooltip-text, #f3f4f6)",
+                      border: "1px solid var(--tooltip-border, rgba(255, 255, 255, 0.2))",
                       borderRadius: "6px",
                       padding: "8px 12px",
                       fontSize: "12px",
                       fontWeight: "400",
                       backdropFilter: "blur(8px)",
-                      boxShadow: "0 10px 40px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4), 0 1px 4px rgba(0, 0, 0, 0.3)",
+                      boxShadow: "var(--tooltip-shadow, 0 10px 40px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4), 0 1px 4px rgba(0, 0, 0, 0.3))",
                     },
                     arrow: {
-                      borderColor: "rgba(30, 30, 30, 0.95)",
+                      borderColor: "var(--tooltip-background, rgba(30, 30, 30, 0.95))",
                     },
                   }}
                 >

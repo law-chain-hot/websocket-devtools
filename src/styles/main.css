@@ -2,6 +2,7 @@
 
 /* 基础样式 */
 @import './variables.css';
+@import './base.css';
 
 /* 通用组件样式 */
 @import './components.css';
@@ -19,6 +20,7 @@
 @import './FavoritesTab.css';
 @import './SystemEventsTab.css';
 @import './LanguageSelector.css';
+@import './theme.css';
 
 /* Extension Icon Styles */
 .extension-icon-panel:hover {

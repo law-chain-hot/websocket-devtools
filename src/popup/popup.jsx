@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
+import ThemeToggle from "../components/ThemeToggle.jsx";
+import { initializeTheme } from "../utils/theme.js";
+import "../styles/variables.css";
+import "../styles/theme.css";
 import i18n, { t, initForPopup } from "../utils/i18n.js";
 import { Settings, Zap, Activity, Power, Wifi, MonitorSpeaker, MessageCircle, Send, Ban, SquareActivity, Home, Heart, Github } from "lucide-react";
 
@@ -129,7 +133,7 @@ const Popup = () => {
           <button
             style={{
               ...styles.switchButton,
-              backgroundColor: isEnabled ? "#fbbf24" : "rgba(255, 255, 255, 0.3)",
+              backgroundColor: isEnabled ? "#fbbf24" : "var(--popup-switch-off, rgba(255, 255, 255, 0.3))",
               boxShadow: isEnabled ? "0 0 20px rgba(251, 191, 36, 0.4)" : "none",
             }}
             onClick={handleToggle}
@@ -205,6 +209,7 @@ const Popup = () => {
       {/* Footer */}
       <div style={styles.footer}>
         <span style={styles.versionText}>v{extensionVersion}</span>
+        <ThemeToggle />
         <div style={styles.footerIcons}>
 
           <div className="tooltip-container">
@@ -264,13 +269,13 @@ const styles = {
     padding: "24px",
     paddingBottom: "0px",
     minHeight: "440px",
-    background: "linear-gradient(135deg, rgb(4 14 29) 0%, rgb(31 53 41 / 88%) 50%, rgb(0 0 0) 100%)",
-    color: "#f1f5f9",
+    background: "var(--popup-background, linear-gradient(135deg, rgb(4 14 29) 0%, rgb(31 53 41 / 88%) 50%, rgb(0 0 0) 100%))",
+    color: "var(--popup-text, #f1f5f9)",
     fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     animation: "slideIn 0.5s ease-out",
     overflow: "hidden",
     border: "none",
-    boxShadow: "0 20px 60px rgba(0, 0, 0, 0.8), 0 10px 30px rgba(0, 0, 0, 0.6), 0 5px 15px rgba(0, 0, 0, 0.4)",
+    boxShadow: "var(--popup-shadow, 0 20px 60px rgba(0, 0, 0, 0.8), 0 10px 30px rgba(0, 0, 0, 0.6), 0 5px 15px rgba(0, 0, 0, 0.4))",
   },
   
   // Background decorative elements
@@ -338,7 +343,7 @@ const styles = {
     border: "1px solid rgba(16, 185, 129, 0.3)",
   },
   logoIcon: {
-    color: "#10b981",
+    color: "var(--popup-accent, #10b981)",
     zIndex: 2,
   },
   dataChip: {
@@ -369,8 +374,8 @@ const styles = {
     margin: 0,
     fontSize: "18px",
     fontWeight: "700",
-    color: "#f1f5f9",
-    textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
+    color: "var(--popup-text, #f1f5f9)",
+    textShadow: "var(--popup-title-shadow, 0 2px 4px rgba(0, 0, 0, 0.3))",
     marginBottom: "4px",
   },
   statusBadge: {
@@ -387,7 +392,7 @@ const styles = {
     animation: "pulse 2s infinite",
   },
   statusText: {
-    color: "rgba(241, 245, 249, 0.8)",
+    color: "var(--popup-secondary, rgba(241, 245, 249, 0.8))",
     fontWeight: "500",
   },
   
@@ -397,11 +402,11 @@ const styles = {
     zIndex: 1,
     marginBottom: "20px",
     padding: "20px",
-    background: "rgba(71, 85, 105, 0.4)",
+    background: "var(--popup-card, rgba(71, 85, 105, 0.4))",
     backdropFilter: "blur(20px)",
     borderRadius: "16px",
-    border: "1px solid rgba(148, 163, 184, 0.2)",
-    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+    border: "1px solid var(--popup-border, rgba(148, 163, 184, 0.2))",
+    boxShadow: "var(--popup-card-shadow, 0 8px 32px rgba(0, 0, 0, 0.3))",
   },
   switchContainer: {
     display: "flex",
@@ -413,17 +418,17 @@ const styles = {
     display: "flex",
     alignItems: "flex-start",
     flex: 1,
-    color: "#f1f5f9",
+    color: "var(--popup-text, #f1f5f9)",
   },
   switchTitle: {
     fontSize: "16px",
     fontWeight: "600",
-    color: "#f1f5f9",
+    color: "var(--popup-text, #f1f5f9)",
     marginBottom: "2px",
   },
   switchSubtitle: {
     fontSize: "12px",
-    color: "rgba(203, 213, 225, 0.8)",
+    color: "var(--popup-secondary, rgba(203, 213, 225, 0.8))",
     lineHeight: "1.3",
   },
   switchButton: {
@@ -458,7 +463,7 @@ const styles = {
     padding: "18px",
     background: "rgba(16, 185, 129, 0.15)",
     backdropFilter: "blur(10px)",
-    color: "#f1f5f9",
+    color: "var(--popup-text, #f1f5f9)",
     border: "1px solid rgba(16, 185, 129, 0.3)",
     borderRadius: "14px",
     fontSize: "14px",
@@ -468,7 +473,7 @@ const styles = {
     display: "flex",
     alignItems: "center",
     gap: "12px",
-    boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
+    boxShadow: "var(--popup-card-shadow, 0 4px 16px rgba(0, 0, 0, 0.2))",
     ':hover': {
       background: "rgba(16, 185, 129, 0.25)",
       transform: "translateY(-2px)",
@@ -508,15 +513,15 @@ const styles = {
   },
   featureCard: {
     padding: "12px",
-    background: "rgba(71, 85, 105, 0.3)",
+    background: "var(--popup-feature, rgba(71, 85, 105, 0.3))",
     backdropFilter: "blur(10px)",
     borderRadius: "10px",
-    border: "1px solid rgba(148, 163, 184, 0.2)",
+    border: "1px solid var(--popup-border, rgba(148, 163, 184, 0.2))",
     textAlign: "center",
     transition: "all 0.3s ease",
     // cursor: "pointer",
     ':hover': {
-      background: "rgba(71, 85, 105, 0.4)",
+      background: "var(--popup-card, rgba(71, 85, 105, 0.4))",
       // transform: "translateY(-2px)",
     },
   },
@@ -529,7 +534,7 @@ const styles = {
     borderRadius: "8px",
     background: "rgba(16, 185, 129, 0.2)",
     margin: "0 auto 8px",
-    color: "#10b981",
+    color: "var(--popup-accent, #10b981)",
   },
   featureText: {
     textAlign: "center",
@@ -537,12 +542,12 @@ const styles = {
   featureTitle: {
     fontSize: "11px",
     fontWeight: "600",
-    color: "#f1f5f9",
+    color: "var(--popup-text, #f1f5f9)",
     marginBottom: "2px",
   },
   featureDesc: {
     fontSize: "10px",
-    color: "rgba(203, 213, 225, 0.7)",
+    color: "var(--popup-muted, rgba(203, 213, 225, 0.7))",
     fontWeight: "400",
   },
   
@@ -554,11 +559,11 @@ const styles = {
     alignItems: "center",
     justifyContent: "space-between",
     paddingTop: "16px",
-    borderTop: "1px solid rgba(148, 163, 184, 0.2)",
+    borderTop: "1px solid var(--popup-border, rgba(148, 163, 184, 0.2))",
   },
   versionText: {
     fontSize: "11px",
-    color: "rgba(203, 213, 225, 0.7)",
+    color: "var(--popup-muted, rgba(203, 213, 225, 0.7))",
     fontWeight: "500",
   },
   footerIcons: {
@@ -573,10 +578,10 @@ const styles = {
     width: "24px",
     height: "24px",
     borderRadius: "50%",
-    background: "rgba(71, 85, 105, 0.4)",
+    background: "var(--popup-card, rgba(71, 85, 105, 0.4))",
     backdropFilter: "blur(10px)",
-    border: "1px solid rgba(148, 163, 184, 0.3)",
-    color: "#cbd5e1",
+    border: "1px solid var(--popup-border, rgba(148, 163, 184, 0.3))",
+    color: "var(--popup-secondary, #cbd5e1)",
     textDecoration: "none",
     cursor: "pointer",
     transition: "all 0.3s ease",
@@ -589,7 +594,7 @@ const styles = {
   loading: {
     textAlign: "center",
     padding: "48px 24px",
-    color: "rgba(203, 213, 225, 0.8)",
+    color: "var(--popup-secondary, rgba(203, 213, 225, 0.8))",
     fontSize: "14px",
     fontWeight: "500",
   },
@@ -698,6 +703,7 @@ style.textContent = `
 document.head.appendChild(style);
 
 // 渲染到DOM
+document.body.classList.add("popup-page");
 const container = document.getElementById("popup-root");
 const root = createRoot(container);
-root.render(<Popup />);
+initializeTheme().then(() => root.render(<Popup />));

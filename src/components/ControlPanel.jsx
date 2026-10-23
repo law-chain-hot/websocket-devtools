@@ -30,8 +30,8 @@ const ControlPanel = ({
           withBorder
           style={{
             background:
-              "linear-gradient(135deg, rgba(55, 58, 64, 0.4) 0%, rgba(55, 58, 64, 0.2) 100%)",
-            borderColor: "rgba(55, 58, 64, 0.5)",
+              "var(--control-card-background, linear-gradient(135deg, rgba(55, 58, 64, 0.4) 0%, rgba(55, 58, 64, 0.2) 100%))",
+            borderColor: "var(--control-card-border, rgba(55, 58, 64, 0.5))",
             padding: "12px",
             backdropFilter: "blur(8px)",
             borderRadius: "8px",
@@ -53,9 +53,9 @@ const ControlPanel = ({
                     justifyContent: "center",
                   }}
                 >
-                  <Activity size={12} color="rgb(96, 165, 250)" />
+                  <Activity size={12} color="var(--control-monitor-icon, rgb(96, 165, 250))" />
                 </Box>
-                <Text size="sm" fw={600} c="rgb(229, 231, 235)">
+                <Text size="sm" fw={600} c="var(--control-title, rgb(229, 231, 235))">
                   {t("panel.controlPanel.monitor")}
                 </Text>
               </Group>
@@ -84,7 +84,7 @@ const ControlPanel = ({
                   animation: isMonitoring ? "pulse 2s infinite" : "none",
                 }}
               />
-              <Text size="xs" c="rgb(156, 163, 175)">
+              <Text size="xs" c="var(--control-secondary, rgb(156, 163, 175))">
                 {isMonitoring
                   ? t("panel.controlPanel.status.active")
                   : t("panel.controlPanel.status.inactive")}
@@ -98,8 +98,8 @@ const ControlPanel = ({
           withBorder
           style={{
             background:
-              "linear-gradient(135deg, rgba(55, 58, 64, 0.4) 0%, rgba(55, 58, 64, 0.2) 100%)",
-            borderColor: "rgba(55, 58, 64, 0.5)",
+              "var(--control-card-background, linear-gradient(135deg, rgba(55, 58, 64, 0.4) 0%, rgba(55, 58, 64, 0.2) 100%))",
+            borderColor: "var(--control-card-border, rgba(55, 58, 64, 0.5))",
             padding: "12px",
             backdropFilter: "blur(8px)",
             borderRadius: "8px",
@@ -114,15 +114,15 @@ const ControlPanel = ({
                   height: 24,
                   borderRadius: 8,
                   background: "rgba(249, 115, 22, 0.2)",
-                  border: "1px solid rgba(251, 146, 60, 0.3)",
+                  border: "1px solid var(--warning-tooltip-border, rgba(251, 146, 60, 0.3))",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
-                <Shield size={12} color="rgb(251, 146, 60)" />
+                <Shield size={12} color="var(--control-block-icon, rgb(251, 146, 60))" />
               </Box>
-              <Text size="sm" fw={600} c="rgb(229, 231, 235)">
+              <Text size="sm" fw={600} c="var(--control-title, rgb(229, 231, 235))">
                 {t("panel.controlPanel.messageControl")}
               </Text>
               <Tooltip
@@ -136,18 +136,18 @@ const ControlPanel = ({
                 withinPortal={true}
                 styles={{
                   tooltip: {
-                    background: "rgba(87, 43, 12, 0.8)",
-                    color: "#fb923c",
-                    border: "1px solid rgba(251, 146, 60, 0.3)",
+                    background: "var(--warning-tooltip-background, rgba(87, 43, 12, 0.8))",
+                    color: "var(--warning-tooltip-text, #fb923c)",
+                    border: "1px solid var(--warning-tooltip-border, rgba(251, 146, 60, 0.3))",
                     borderRadius: "4px",
                     padding: "6px 12px",
                     backdropFilter: "blur(8px)",
-                    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.89)",
+                    boxShadow: "var(--tooltip-shadow, 0 8px 32px rgba(0, 0, 0, 0.89))",
                     whiteSpace: "normal",
                     wordWrap: "break-word",
                   },
                   arrow: {
-                    borderColor: "#f59e0b",
+                    borderColor: "var(--warning-tooltip-text, #f59e0b)",
                   },
                 }}
               >
@@ -155,7 +155,7 @@ const ControlPanel = ({
                   size={12}
                   strokeWidth={2.5}
                   style={{
-                    color: "#c28535",
+                    color: "var(--warning-tooltip-text, #c28535)",
                     cursor: "pointer",
                     verticalAlign: "middle",
                   }}
@@ -182,7 +182,7 @@ const ControlPanel = ({
                         : "rgb(107, 114, 128)",
                     }}
                   />
-                  <Text size="xs" c="rgb(209, 213, 219)">
+                  <Text size="xs" c="var(--control-label, rgb(209, 213, 219))">
                     {t("panel.controlPanel.blockOutgoing")}
                   </Text>
                 </Group>
@@ -232,7 +232,7 @@ const ControlPanel = ({
                         : "rgb(107, 114, 128)",
                     }}
                   />
-                  <Text size="xs" c="rgb(209, 213, 219)">
+                  <Text size="xs" c="var(--control-label, rgb(209, 213, 219))">
                     {t("panel.controlPanel.blockIncoming")}
                   </Text>
                 </Group>

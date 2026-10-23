@@ -216,18 +216,18 @@ const SimulateEditorTab = ({
               withinPortal={true}
               styles={{
                 tooltip: {
-                  background: "rgba(87, 43, 12, 0.8)",
-                  color: "#fb923c",
-                  border: "1px solid rgba(251, 146, 60, 0.3)",
+                  background: "var(--warning-tooltip-background, rgba(87, 43, 12, 0.8))",
+                  color: "var(--warning-tooltip-text, #fb923c)",
+                  border: "1px solid var(--warning-tooltip-border, rgba(251, 146, 60, 0.3))",
                   borderRadius: "4px",
                   padding: "6px 12px",
                   backdropFilter: "blur(8px)",
-                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.89)",
+                  boxShadow: "var(--tooltip-shadow, 0 8px 32px rgba(0, 0, 0, 0.89))",
                   whiteSpace: "normal",
                   wordWrap: "break-word",
                 },
                 arrow: {
-                  borderColor: "#f59e0b",
+                  borderColor: "var(--warning-tooltip-text, #f59e0b)",
                 },
               }}
             >
@@ -235,7 +235,7 @@ const SimulateEditorTab = ({
                 size={12}
                 strokeWidth={2.5}
                 style={{
-                  color: "#c28535",
+                  color: "var(--warning-tooltip-text, #c28535)",
                   cursor: "pointer",
                   verticalAlign: "middle",
                 }}

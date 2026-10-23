@@ -13,13 +13,22 @@ import {
   Columns2,
   Rows2,
 } from "lucide-react";
-import { t } from "../utils/i18n.js";
+import { getCurrentLanguage, t } from "../utils/i18n.js";
 import {
   buildMessageSections,
   createMessageGroupingCache,
 } from "../utils/messageGrouping.js";
 import CheeseIcon from "../Icons/Cheese.jsx";
 import ProtobufIcon from "../Icons/Protobuf.jsx";
+import MessageProjectionControls from "./MessageProjectionControls.jsx";
+import MessageProjectionValue from "./MessageProjectionValue.jsx";
+import {
+  createMessageProjectionCache,
+  buildProjectedSections,
+  getProjectedMessages,
+  getVisibleProjectedMessages,
+  parseProjectionPath,
+} from "../utils/messageProjection.js";
 
 // SVG icon components
 const Icons = {
@@ -73,6 +82,13 @@ const Icons = {
   ),
 };
 
+const DEFAULT_PROJECTION_CONFIG = Object.freeze({
+  mode: "raw",
+  path: "",
+  hideMissing: true,
+  hideEmpty: true,
+});
+
 const MessageDetails = ({
   connection,
   selectedConnectionId,
@@ -80,6 +96,7 @@ const MessageDetails = ({
   onSimulateMessage,
   onClearMessages,
   onOpenSimulatePanel,
+  connectionIds,
 }) => {
   const [filterDirection, setFilterDirection] = useState("all"); // 'all' | 'outgoing' | 'incoming'
   const [filterText, setFilterText] = useState(""); // Message content filter
@@ -87,7 +104,6 @@ const MessageDetails = ({
   const [selectedMessageKey, setSelectedMessageKey] = useState(null); // Selected message
   const [copiedMessageKey, setCopiedMessageKey] = useState(null); // Copied message key
   const [sortOrder, setSortOrder] = useState("desc"); // 'asc' | 'desc' time sorting
-  const [hoveredMessageKey, setHoveredMessageKey] = useState(null); // Hovered message key
   // Split layout direction: 'vertical' (list on top, detail below) | 'horizontal' (list left, detail right)
   const [layoutDirection, setLayoutDirection] = useState(() => {
     try {
@@ -105,6 +121,20 @@ const MessageDetails = ({
   const [groupSortMode, setGroupSortMode] = useState("firstOutgoing");
   const [collapsedGroups, setCollapsedGroups] = useState({});
   const groupingCacheRef = useRef(createMessageGroupingCache());
+  const projectionCacheRef = useRef(createMessageProjectionCache());
+  const projectionConfigsRef = useRef(new Map());
+  const rowKeysRef = useRef(new WeakMap());
+  const nextRowKeyRef = useRef(0);
+  const [projectionConfig, setProjectionConfig] = useState({
+    ...DEFAULT_PROJECTION_CONFIG,
+    connectionId: null,
+  });
+  // Read the next connection's saved config immediately instead of showing the previous connection's fields for one paint.
+  const activeProjectionConfig = projectionConfig.connectionId === selectedConnectionId
+    ? projectionConfig
+    : projectionConfigsRef.current.get(selectedConnectionId) || DEFAULT_PROJECTION_CONFIG;
+  // This prop invalidates memoized field labels after the panel switches language.
+  const currentLocale = getCurrentLanguage();
   const sortedMessages = useMemo(() => {
     const filteredMessages = filterMessages(connection?.messages || [], {
       direction: filterDirection,
@@ -124,6 +154,15 @@ const MessageDetails = ({
     filterInvert,
     sortOrder,
   ]);
+  const candidateMessages = useMemo(() => {
+    if (activeProjectionConfig.mode !== "field") return [];
+    const recentMessages = (connection?.messages || []).slice(-50).reverse();
+    if (!selectedMessageKey || recentMessages.some((message) => message.messageId === selectedMessageKey)) {
+      return recentMessages;
+    }
+    const selectedMessage = sortedMessages.find((message) => message.messageId === selectedMessageKey);
+    return selectedMessage ? [selectedMessage, ...recentMessages] : recentMessages;
+  }, [activeProjectionConfig.mode, connection?.messages, selectedMessageKey, sortedMessages]);
 
   const groupOtherTitle = t("messageDetails.grouping.other");
   const missingGroupFieldTitle = t("messageDetails.grouping.noField", {
@@ -155,6 +194,34 @@ const MessageDetails = ({
     ]
   );
 
+  const projectionPath = useMemo(
+    () => parseProjectionPath(activeProjectionConfig.path),
+    [activeProjectionConfig.path]
+  );
+  const projectionTokens = projectionPath.ok ? projectionPath.tokens : null;
+  const projectedSections = useMemo(
+    () => buildProjectedSections(messageSections, activeProjectionConfig, projectionTokens, projectionCacheRef.current),
+    [activeProjectionConfig, messageSections, projectionTokens]
+  );
+  // Detail selection remains available when its group is collapsed.
+  const projectedMessages = useMemo(
+    () => getProjectedMessages(projectedSections),
+    [projectedSections]
+  );
+
+  const visibleMessages = useMemo(
+    () => getVisibleProjectedMessages(projectedSections, collapsedGroups),
+    [projectedSections, collapsedGroups]
+  );
+
+  const updateProjectionConfig = (patch) => {
+    setProjectionConfig((previous) => {
+      const next = { ...previous, ...patch, connectionId: selectedConnectionId };
+      if (selectedConnectionId) projectionConfigsRef.current.set(selectedConnectionId, next);
+      return next;
+    });
+  };
+
   
   // Use new message highlight hook
   const { isNewMessage, clearHighlights } = useNewMessageHighlight(
@@ -166,13 +233,34 @@ const MessageDetails = ({
   useEffect(() => {
     setSelectedMessageKey(null);
     clearHighlights();
+    setProjectionConfig(
+      projectionConfigsRef.current.get(selectedConnectionId) || {
+        ...DEFAULT_PROJECTION_CONFIG,
+        connectionId: selectedConnectionId,
+      }
+    );
   }, [selectedConnectionId, clearHighlights]);
+
+  useEffect(() => {
+    if (!connectionIds) return;
+    for (const connectionId of projectionConfigsRef.current.keys()) {
+      if (!connectionIds.has(connectionId)) projectionConfigsRef.current.delete(connectionId);
+    }
+  }, [connectionIds]);
+
+  useEffect(() => {
+    if (selectedMessageKey && !projectedMessages.some((message) => message.messageId === selectedMessageKey)) {
+      setSelectedMessageKey(null);
+    }
+  }, [projectedMessages, selectedMessageKey]);
 
   // Keyboard navigation for message selection
   useEffect(() => {
     const handleKeyDown = (e) => {
       // Only handle arrow keys when there are visible messages
-      if (sortedMessages.length === 0) return;
+      if (visibleMessages.length === 0) return;
+      const target = e.target;
+      if (target instanceof HTMLElement && (target.isContentEditable || /^(INPUT|SELECT|TEXTAREA|BUTTON)$/.test(target.tagName))) return;
       
       const tableContainer = document.querySelector('.messages-table-container');
       const isTableFocused = tableContainer && document.activeElement === tableContainer;
@@ -183,7 +271,7 @@ const MessageDetails = ({
         e.preventDefault();
         
         const currentIndex = selectedMessageKey 
-          ? sortedMessages.findIndex(msg => msg.messageId === selectedMessageKey)
+          ? visibleMessages.findIndex(msg => msg.messageId === selectedMessageKey)
           : -1;
         
         let newIndex;
@@ -193,11 +281,11 @@ const MessageDetails = ({
         } else if (e.key === 'ArrowUp') {
           newIndex = currentIndex > 0 ? currentIndex - 1 : currentIndex;
         } else {
-          newIndex = currentIndex < sortedMessages.length - 1 ? currentIndex + 1 : currentIndex;
+          newIndex = currentIndex < visibleMessages.length - 1 ? currentIndex + 1 : currentIndex;
         }
         
-        if (newIndex >= 0 && newIndex < sortedMessages.length) {
-          const newMessageKey = sortedMessages[newIndex].messageId;
+        if (newIndex >= 0 && newIndex < visibleMessages.length) {
+          const newMessageKey = visibleMessages[newIndex].messageId;
           setSelectedMessageKey(newMessageKey);
           
           // Scroll the selected row into view
@@ -228,7 +316,7 @@ const MessageDetails = ({
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [sortedMessages, selectedMessageKey]);
+  }, [visibleMessages, selectedMessageKey]);
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -388,12 +476,22 @@ const MessageDetails = ({
 
   const getSelectedMessage = () => {
     if (!selectedMessageKey) return null;
-    return sortedMessages.find((msg) => {
+    return projectedMessages.find((msg) => {
       return msg.messageId === selectedMessageKey;
     });
   };
 
-  const renderDataCell = (message) => {
+  const getStableMessageKey = (message) => {
+    if (message.messageId) return message.messageId;
+    const existing = rowKeysRef.current.get(message);
+    if (existing) return existing;
+    const next = `message-row-${nextRowKeyRef.current}`;
+    nextRowKeyRef.current += 1;
+    rowKeysRef.current.set(message, next);
+    return next;
+  };
+
+  const renderDataCell = (message, projectionResult) => {
     const isSystemMessage = message.type !== "message";
     const tags = [];
 
@@ -434,6 +532,20 @@ const MessageDetails = ({
       );
     }
 
+    if (activeProjectionConfig.mode === "field" && !isSystemMessage) {
+      return (
+        <div className="data-cell message-projection-cell">
+          {!isSystemMessage && (
+            <span className={`direction-arrow ${message.direction}`}>
+              {message.direction === "outgoing" ? <Icons.ArrowUp /> : <Icons.ArrowDown />}
+            </span>
+          )}
+          {tags.length > 0 && <span className="message-tags">{tags}</span>}
+          <MessageProjectionValue result={projectionResult} locale={currentLocale} />
+        </div>
+      );
+    }
+
     if (isSystemMessage) {
       return (
         <div className="data-cell system">
@@ -467,27 +579,22 @@ const MessageDetails = ({
     );
   };
 
-  const renderMessageRow = (message, index) => {
+  const renderMessageRow = (message, projectionResult) => {
     const messageKey = message.messageId;
     const isSelected = selectedMessageKey === messageKey;
     const isNewMsg = isNewMessage(messageKey);
-    const isHovered = hoveredMessageKey === messageKey;
 
     return (
       <tr
-        key={`${messageKey}-${index}`}
+        key={getStableMessageKey(message)}
         data-message-id={messageKey}
         className={`message-row ${message.direction} ${message.simulated ? "simulated" : ""} ${
           message.blocked ? "blocked" : ""
-        } ${isSelected ? "selected" : ""} ${isNewMsg ? "new-message" : ""} ${
-          isHovered ? "hovered" : ""
-        }`}
+        } ${isSelected ? "selected" : ""} ${isNewMsg ? "new-message" : ""}`}
         onClick={() => handleMessageClick(messageKey)}
-        onMouseEnter={() => setHoveredMessageKey(messageKey)}
-        onMouseLeave={() => setHoveredMessageKey(null)}
       >
         <td className="col-data">
-          <div className="data-cell-wrapper">{renderDataCell(message)}</div>
+          <div className="data-cell-wrapper">{renderDataCell(message, projectionResult)}</div>
         </td>
         <td className="col-length">{getMessageLength(message)}</td>
         <td className="col-time">{formatTimestamp(message.timestamp)}</td>
@@ -504,12 +611,12 @@ const MessageDetails = ({
   // Detail panel visual style adapts to split direction (shadow/rounded corners face the list)
   const detailPanelStyle = isHorizontal
     ? {
-        boxShadow: "rgba(21, 21, 21, 0.81) -5px 0px 20px 20px",
+        boxShadow: "var(--detail-shadow-horizontal, rgba(21, 21, 21, 0.81) -5px 0px 20px 20px)",
         borderTopLeftRadius: "20px",
         borderBottomLeftRadius: "20px",
       }
     : {
-        boxShadow: "rgba(21, 21, 21, 0.81) 0px -5px 20px 20px",
+        boxShadow: "var(--detail-shadow-vertical, rgba(21, 21, 21, 0.81) 0px -5px 20px 20px)",
         borderTopLeftRadius: "20px",
         borderTopRightRadius: "20px",
       };
@@ -552,6 +659,7 @@ const MessageDetails = ({
                           value={filterText}
                           onChange={(e) => setFilterText(e.target.value)}
                           placeholder={t("messageDetails.controls.filterPlaceholder")}
+                          title={t("messageDetails.projection.searchRawTooltip")}
                         />
                         {filterText && (
                           <button className="clear-filter-btn" onClick={handleClearSearchFilter}>
@@ -642,12 +750,37 @@ const MessageDetails = ({
                       <span className="group-help-text">{t("messageDetails.grouping.emptyValueHint")}</span>
                     )}
                   </div>
+                  <MessageProjectionControls
+                    key={selectedConnectionId || "no-connection"}
+                    config={activeProjectionConfig}
+                    messages={candidateMessages}
+                    cache={projectionCacheRef.current}
+                    onChange={updateProjectionConfig}
+                  />
+                  {activeProjectionConfig.mode === "field" && (
+                    <span className="projection-count">
+                      {t("messageDetails.projection.count", {
+                        visible: visibleMessages.length,
+                        total: sortedMessages.length,
+                      })}
+                    </span>
+                  )}
                 </div>
               </div>
 
               {sortedMessages.length === 0 ? (
                 <div className="empty-state">
                   <p>{t("messageDetails.emptyState.noMessages")}</p>
+                </div>
+              ) : projectedSections.length === 0 ? (
+                <div className="empty-state projection-empty-state">
+                  <p>{t("messageDetails.projection.noVisibleValues")}</p>
+                  <button type="button" onClick={() => updateProjectionConfig({ hideMissing: false, hideEmpty: false })}>
+                    {t("messageDetails.projection.showAll")}
+                  </button>
+                  <button type="button" onClick={() => updateProjectionConfig({ mode: "raw" })}>
+                    {t("messageDetails.projection.restoreRaw")}
+                  </button>
                 </div>
               ) : (
                 <div
@@ -658,15 +791,15 @@ const MessageDetails = ({
                   <table className="ws-messages-table">
                   <thead>
                     <tr>
-                      <th className="col-data">{t("messageDetails.table.data")}</th>
-                      <th className="col-length">{t("messageDetails.table.length")}</th>
+                      <th className="col-data">{activeProjectionConfig.mode === "field" ? t("messageDetails.projection.value") : t("messageDetails.table.data")}</th>
+                      <th className="col-length" title={t("messageDetails.projection.lengthTooltip")}>{t("messageDetails.table.length")}</th>
                       <th className="col-time" onClick={handleSortToggle} style={{ cursor: "pointer" }}>
                         {t("messageDetails.table.time")} {sortOrder === "desc" ? "▼" : "▲"}
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {messageSections.map((section) => (
+                    {projectedSections.map((section) => (
                       <React.Fragment key={section.id}>
                         {section.isGrouped && (
                           <tr className="message-group-row">
@@ -680,14 +813,18 @@ const MessageDetails = ({
                                 {section.displayValue && (
                                   <span className="message-group-display-value">{section.displayValue}</span>
                                 )}
-                                <span className="message-group-count">{section.messages.length}</span>
+                                <span className="message-group-count">
+                                  {activeProjectionConfig.mode === "field"
+                                    ? `${section.projectedMessages.length} / ${section.messages.length}`
+                                    : section.messages.length}
+                                </span>
                               </button>
                             </td>
                           </tr>
                         )}
                         {(!section.isGrouped || !collapsedGroups[section.id]) &&
-                          section.messages.map((message, index) =>
-                            renderMessageRow(message, `${section.id}-${index}`)
+                          section.projectedMessages.map(({ message, result }) =>
+                            renderMessageRow(message, result)
                           )}
                       </React.Fragment>
                     ))}

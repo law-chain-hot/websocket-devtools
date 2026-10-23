@@ -23,89 +23,75 @@
   --border-light: #6a6a6a; /* Light border, brighter */
 }
 
-/* Base reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-/* Improved monospace font */
-.monospace {
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
-}
-
-/* Scrollbar styles */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-primary);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--text-muted);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-secondary);
-}
-
-/* Common click styles */
-.clickable {
-  cursor: pointer;
-  user-select: none;
-}
-
-.clickable:hover {
-  background-color: var(--bg-tertiary);
-}
-
-/* Empty state styles */
-.empty-state {
-  text-align: center;
-  padding: 40px 20px;
-}
-
-.empty-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
-  opacity: 0.5;
-}
-
-.empty-text {
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
-}
-
-.empty-description {
-  font-size: 14px;
-  color: var(--text-muted);
-  line-height: 1.4;
-  max-width: 300px;
-}
-
-/* Animation effects */
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+/* Light palette also reaches Mantine portals attached directly to body. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f5f8;
+  --bg-tertiary: #e8edf3;
+  --bg-main: #f3f5f8;
+  --bg-content: #ffffff;
+  --bg-card: #ffffff;
+  --bg-input: #ffffff;
+  --bg-tab: #e8edf3;
+  --text-primary: #1b2533;
+  --text-secondary: #465469;
+  --text-muted: #5a687a;
+  --border-color: #cbd3de;
+  --border: #cbd3de;
+  --border-light: #a8b5c6;
+  --accent-color: #0068b3;
+  --accent-hover-color: #00558f;
+  --accent-transparent-color: #dbeeff;
+  --success-color: #18743a;
+  --warning-color: #ffc107;
+  --danger-color: #bd2637;
+  --error-color: var(--danger-color);
+  --warning-text: #885000;
+  --purple-text: #7540a6;
+  --success-background: #e8f5ed;
+  --warning-background: #fff3d6;
+  --danger-background: #fcebed;
+  --purple-background: #f1eafa;
+  --shadow: 0 2px 8px rgba(27, 37, 51, 0.12);
+  --overlay-shadow: 0 8px 28px rgba(27, 37, 51, 0.18);
+  --editor-background: #ffffff;
+  --editor-gutter: #f3f5f8;
+  --control-card-background: #f3f5f8;
+  --control-card-border: #cbd3de;
+  --control-title: #1b2533;
+  --control-secondary: #465469;
+  --control-label: #465469;
+  --control-monitor-icon: #0068b3;
+  --control-block-icon: #885000;
+  --tooltip-background: #ffffff;
+  --tooltip-text: #1b2533;
+  --tooltip-border: #cbd3de;
+  --tooltip-shadow: 0 4px 16px rgba(27, 37, 51, 0.18);
+  --warning-tooltip-background: #fff3d6;
+  --warning-tooltip-text: #885000;
+  --warning-tooltip-border: #dbb76c;
+  --system-tooltip-background: #fff3d6;
+  --system-warning-text: #885000;
+  --detail-shadow-horizontal: -4px 0 12px rgba(27, 37, 51, 0.12);
+  --detail-shadow-vertical: 0 -4px 12px rgba(27, 37, 51, 0.12);
+  --connection-success-icon: var(--success-color);
+  --connection-warning-icon: var(--warning-text);
+  --connection-danger-icon: var(--danger-color);
+  --simulate-editor-icon: #0068b3;
+  --simulate-favorite-icon: #885000;
+  --simulate-system-icon: #885000;
+  --simulate-inactive-icon: #5a687a;
+  --popup-background: #f3f5f8;
+  --popup-text: #1b2533;
+  --popup-secondary: #465469;
+  --popup-muted: #5a687a;
+  --popup-card: #ffffff;
+  --popup-feature: #ffffff;
+  --popup-border: #cbd3de;
+  --popup-accent: #047857;
+  --popup-switch-off: #a8b5c6;
+  --popup-shadow: none;
+  --popup-card-shadow: 0 2px 8px rgba(27, 37, 51, 0.08);
+  --popup-title-shadow: none;
 }

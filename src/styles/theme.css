@@ -1,0 +1,423 @@
+/* Shared theme control; fixed dimensions avoid header/footer movement. */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-color);
+}
+
+.theme-toggle:active {
+  background: var(--bg-secondary);
+}
+
+.theme-toggle:focus-visible,
+:root[data-theme="light"] button:focus-visible,
+:root[data-theme="light"] a:focus-visible {
+  outline: 2px solid var(--accent-color) !important;
+  outline-offset: 2px;
+}
+
+/* Legacy fixed colors are overridden only in light mode. */
+:root[data-theme="light"] .ws-list-title,
+:root[data-theme="light"] .ws-history-title,
+:root[data-theme="light"] .ws-history-item-url,
+:root[data-theme="light"] .system-events-tab,
+:root[data-theme="light"] .sys-evt-empty-state h4,
+:root[data-theme="light"] .sys-evt-header-text h2,
+:root[data-theme="light"] .sys-evt-card-title,
+:root[data-theme="light"] .sys-evt-form-label,
+:root[data-theme="light"] .sys-evt-form-select,
+:root[data-theme="light"] .sys-evt-form-input {
+  color: var(--text-primary);
+}
+
+:root[data-theme="light"] .ws-history-item-meta,
+:root[data-theme="light"] .ws-history-item-delete,
+:root[data-theme="light"] .ws-history-empty,
+:root[data-theme="light"] .ws-history-empty-icon,
+:root[data-theme="light"] .sys-evt-empty-state,
+:root[data-theme="light"] .sys-evt-empty-icon,
+:root[data-theme="light"] .sys-evt-empty-state p,
+:root[data-theme="light"] .sys-evt-header-content,
+:root[data-theme="light"] .sys-evt-header-icon,
+:root[data-theme="light"] .sys-evt-header-text p,
+:root[data-theme="light"] .sys-evt-connection-url,
+:root[data-theme="light"] .sys-evt-card-description,
+:root[data-theme="light"] .sys-evt-form-input::placeholder,
+:root[data-theme="light"] .sys-evt-reset-button,
+:root[data-theme="light"] .json-viewer-btn {
+  color: var(--text-secondary);
+}
+
+:root[data-theme="light"] .ws-connection-item.default,
+:root[data-theme="light"] .ws-history-item,
+:root[data-theme="light"] .simulate-window-container,
+:root[data-theme="light"] .json-viewer-container {
+  background: var(--bg-primary);
+}
+
+:root[data-theme="light"] .ws-connection-item:hover.default,
+:root[data-theme="light"] .ws-history-item:hover,
+:root[data-theme="light"] .ws-connection-indicator-btn:hover,
+:root[data-theme="light"] .ws-connection-traffic-btn:hover,
+:root[data-theme="light"] .panel-header .language-selector-trigger:hover,
+:root[data-theme="light"] .message-group-header:hover,
+:root[data-theme="light"] .message-row:hover {
+  background: var(--bg-tertiary);
+}
+
+:root[data-theme="light"] .ws-connection-item.selected {
+  background: var(--accent-transparent-color);
+  border-color: var(--accent-color);
+}
+
+:root[data-theme="light"] .ws-connection-item,
+:root[data-theme="light"] .ws-history-item,
+:root[data-theme="light"] .ws-history-section,
+:root[data-theme="light"] .ws-manual-connection-bar,
+:root[data-theme="light"] .ws-add-connection-btn,
+:root[data-theme="light"] .protobuf-controls,
+:root[data-theme="light"] .ws-messages-table td,
+:root[data-theme="light"] .ws-messages-table th {
+  border-color: var(--border-color);
+}
+
+:root[data-theme="light"] .ws-modal-divider,
+:root[data-theme="light"] .json-viewer-divider {
+  background: var(--border-color);
+}
+
+:root[data-theme="light"] .ws-connection-group-title.active,
+:root[data-theme="light"] .ws-connection-status-text.active,
+:root[data-theme="light"] .ws-history-item-icon,
+:root[data-theme="light"] .json-viewer-badge-green,
+:root[data-theme="light"] .sys-evt-code-info-success {
+  color: var(--success-color);
+}
+
+:root[data-theme="light"] .ws-list-clear-button,
+:root[data-theme="light"] .ws-connection-close-btn,
+:root[data-theme="light"] .ws-connection-group-title.inactive,
+:root[data-theme="light"] .ws-connection-status-text.inactive,
+:root[data-theme="light"] .ws-connection-status-text.closing,
+:root[data-theme="light"] .websocket-panel-block-status-label,
+:root[data-theme="light"] .sys-evt-error-icon,
+:root[data-theme="light"] .sys-evt-code-info-error {
+  color: var(--danger-color);
+}
+
+:root[data-theme="light"] .ws-connection-close-btn svg {
+  color: var(--text-muted);
+  stroke: currentColor;
+}
+
+:root[data-theme="light"] .ws-connection-close-btn:hover svg {
+  color: var(--danger-color);
+}
+
+:root[data-theme="light"] .ws-connection-status-text.connecting,
+:root[data-theme="light"] .ws-iframe-source-icon,
+:root[data-theme="light"] .ws-iframe-source-text,
+:root[data-theme="light"] .limit-message,
+:root[data-theme="light"] .favorite-btn:hover,
+:root[data-theme="light"] .json-viewer-badge-yellow,
+:root[data-theme="light"] .traffic-pause-icon,
+:root[data-theme="light"] .traffic-pause-title,
+:root[data-theme="light"] .traffic-pause-description,
+:root[data-theme="light"] .sys-evt-close-icon,
+:root[data-theme="light"] .sys-evt-code-info-warning {
+  color: var(--warning-text);
+}
+
+:root[data-theme="light"] .connection-badge,
+:root[data-theme="light"] .message-group-count,
+:root[data-theme="light"] .json-viewer-badge-blue {
+  color: var(--accent-color);
+}
+
+:root[data-theme="light"] .json-viewer-badge-purple {
+  color: var(--purple-text);
+}
+
+/* Editors, toolbar states and syntax colors follow the CodeMirror light theme. */
+:root[data-theme="light"] .json-viewer-controls,
+:root[data-theme="light"] .simulate-window-content,
+:root[data-theme="light"] .simulate-window-content .simulate-panel-empty,
+:root[data-theme="light"] .simulate-window-content .simulate-panel-empty.floating,
+:root[data-theme="light"] .simulate-window-content .mantine-Tabs-list,
+:root[data-theme="light"] .simulate-window-header,
+:root[data-theme="light"] .sys-evt-tab-trigger {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+:root[data-theme="light"] .json-viewer-btn-inactive {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+:root[data-theme="light"] .json-viewer-btn-active-green {
+  background: var(--success-background);
+  border-color: var(--success-color);
+  color: var(--success-color);
+}
+
+:root[data-theme="light"] .json-viewer-btn-active-orange {
+  background: var(--warning-background);
+  border-color: var(--warning-text);
+  color: var(--warning-text);
+}
+
+:root[data-theme="light"] .json-viewer-btn-active-blue {
+  background: var(--accent-transparent-color);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+:root[data-theme="light"] .json-viewer-btn-active-purple {
+  background: var(--purple-background);
+  border-color: var(--purple-text);
+  color: var(--purple-text);
+}
+
+:root[data-theme="light"] .json-viewer-action-buttons .json-viewer-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+:root[data-theme="light"] .json-viewer-action-buttons .json-viewer-btn.btn-copy:hover {
+  background: var(--success-background);
+  color: var(--success-color);
+}
+
+:root[data-theme="light"] .json-viewer-action-buttons .json-viewer-btn.btn-simulate:hover,
+:root[data-theme="light"] .json-viewer-action-buttons .json-viewer-btn.btn-search:hover {
+  background: var(--accent-transparent-color);
+  color: var(--accent-color);
+}
+
+:root[data-theme="light"] .json-viewer-action-buttons .json-viewer-btn.btn-favorite:hover {
+  background: var(--warning-background);
+  color: var(--warning-text);
+}
+
+:root[data-theme="light"] .json-viewer-action-buttons .json-viewer-btn.btn-nested:hover {
+  background: var(--purple-background);
+  color: var(--purple-text);
+}
+
+:root[data-theme="light"] .json-viewer-action-buttons .json-viewer-btn:hover svg {
+  color: inherit;
+  stroke: currentColor;
+}
+
+:root[data-theme="light"] .json-viewer-btn-disabled,
+:root[data-theme="light"] .json-viewer-btn-disabled:hover {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-muted) !important;
+}
+
+:root[data-theme="light"] .json-viewer-btn:hover,
+:root[data-theme="light"] .sys-evt-tab-trigger:hover,
+:root[data-theme="light"] .simulate-window-content .mantine-Tabs-tab:hover svg {
+  filter: none;
+}
+
+:root[data-theme="light"] .sys-evt-empty-state,
+:root[data-theme="light"] .favorites-usage-count,
+:root[data-theme="light"] .language-selector-option-code,
+:root[data-theme="light"] .message-preview-inline {
+  opacity: 1;
+}
+
+:root[data-theme="light"] .message-row.selected .direction-arrow,
+:root[data-theme="light"] .message-row.selected .system-icon,
+:root[data-theme="light"] .message-row.selected .system-text {
+  color: #ffffff;
+}
+
+:root[data-theme="light"] .json-viewer-codemirror .cm-foldGutter .cm-gutterElement:hover,
+:root[data-theme="light"] .simulate-window-content .mantine-Tabs-tab:hover {
+  background: var(--bg-tertiary);
+}
+
+:root[data-theme="light"] .simulate-window-content .mantine-Tabs-tab[data-active] {
+  color: var(--text-primary);
+}
+
+/* Floating windows, portals, pinned headers and resize handles. */
+:root[data-theme="light"] .simulate-floating-window,
+:root[data-theme="light"] .simulate-floating-window.pinned,
+:root[data-theme="light"] .floating-simulate-window,
+:root[data-theme="light"] .language-selector-dropdown,
+:root[data-theme="light"] .sys-evt-event-card,
+:root[data-theme="light"] .sys-evt-event-card:hover {
+  box-shadow: var(--overlay-shadow);
+}
+
+:root[data-theme="light"] .ws-modal {
+  box-shadow: var(--overlay-shadow) !important;
+}
+
+:root[data-theme="light"] .ws-modal-overlay {
+  background-color: rgba(27, 37, 51, 0.35) !important;
+}
+
+:root[data-theme="light"] .simulate-window-header:hover,
+:root[data-theme="light"] .simulate-window-header.pinned,
+:root[data-theme="light"] .simulate-window-header.pinned:hover {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+  filter: none;
+}
+
+:root[data-theme="light"] .window-control-btn,
+:root[data-theme="light"] .simulate-window-header:hover .window-control-btn {
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+}
+
+:root[data-theme="light"] .window-control-btn:hover {
+  background: var(--bg-secondary);
+}
+
+:root[data-theme="light"] .window-control-btn.pin:hover,
+:root[data-theme="light"] .window-control-btn.pin.active,
+:root[data-theme="light"] .simulate-window-header:hover .window-control-btn.pin.active {
+  background: var(--success-background);
+  color: var(--success-color);
+}
+
+:root[data-theme="light"] .simulate-window-header:hover .window-control-btn.minimize:hover {
+  background: var(--warning-background);
+  color: var(--warning-text);
+}
+
+:root[data-theme="light"] .message-detail-resize-handle.panel-resize-handle {
+  background: var(--border-color);
+  box-shadow: var(--shadow);
+}
+
+:root[data-theme="light"] .message-detail-resize-handle.panel-resize-handle::after {
+  background: var(--text-muted);
+  box-shadow: none;
+}
+
+/* System-event cards retain semantic success, warning and error distinctions. */
+:root[data-theme="light"] .sys-evt-tab-trigger.active {
+  background: var(--accent-transparent-color);
+  color: var(--accent-color);
+  box-shadow: var(--shadow);
+}
+
+:root[data-theme="light"] .sys-evt-event-card:hover {
+  border-color: var(--border-light);
+}
+
+:root[data-theme="light"] .sys-evt-reset-button:hover {
+  color: var(--text-primary);
+}
+
+:root[data-theme="light"] .sys-evt-close-button {
+  background: var(--warning-background);
+  color: var(--warning-text);
+}
+
+:root[data-theme="light"] .sys-evt-error-button {
+  background: var(--danger-background);
+  color: var(--danger-color);
+}
+
+:root[data-theme="light"] .sys-evt-close-button:hover:not(:disabled) {
+  background: var(--warning-text);
+  border-color: var(--warning-text);
+  color: #ffffff;
+}
+
+:root[data-theme="light"] .sys-evt-error-button:hover:not(:disabled) {
+  background: var(--danger-color);
+  border-color: var(--danger-color);
+  color: #ffffff;
+}
+
+:root[data-theme="light"] .system-events-tab::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+:root[data-theme="light"] .system-events-tab::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+}
+
+:root[data-theme="light"] .system-events-tab::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+:root[data-theme="light"] .search-input:focus-within .mantine-TextInput-section[data-position="left"] {
+  color: var(--warning-text);
+}
+
+:root[data-theme="light"] .search-input .mantine-ActionIcon-root:hover {
+  color: var(--warning-text) !important;
+}
+
+:root[data-theme="light"] .receive-btn,
+:root[data-theme="light"] .cancel-btn,
+:root[data-theme="light"] .delete-btn {
+  color: var(--danger-color) !important;
+}
+
+:root[data-theme="light"] .edit-btn {
+  color: var(--warning-text) !important;
+}
+
+:root[data-theme="light"] .send-btn,
+:root[data-theme="light"] .save-btn {
+  color: var(--success-color) !important;
+}
+
+:root[data-theme="light"] .save-btn:disabled,
+:root[data-theme="light"] .cancel-btn:disabled {
+  color: var(--text-muted) !important;
+}
+
+/* Popup palette is supplied through inline fallbacks, keeping dark styles intact. */
+:root[data-theme="light"] .popup-page {
+  background: var(--popup-background);
+  color: var(--popup-text);
+}
+
+:root[data-theme="light"] .primary-button:hover {
+  background: var(--success-background) !important;
+}
+
+:root[data-theme="light"] .feature-card-with-bg:hover,
+:root[data-theme="light"] .footer-link:hover {
+  background: var(--bg-tertiary) !important;
+}
+
+:root[data-theme="light"] .tooltip,
+:root[data-theme="light"] .simulate-tooltip {
+  background: var(--tooltip-background);
+  color: var(--tooltip-text);
+  box-shadow: var(--tooltip-shadow);
+  border: 1px solid var(--tooltip-border);
+}
+
+:root[data-theme="light"] .tooltip::after {
+  border-top-color: var(--tooltip-border);
+}

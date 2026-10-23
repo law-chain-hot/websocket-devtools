@@ -154,15 +154,15 @@ const WebSocketList = ({
     // Helper function to render status icon
     const renderStatusIcon = () => {
       if (connection.status === "connecting") {
-        return <Loader size={14} color="#f59e0b" className="connecting-spinner" />;
+        return <Loader size={14} color="var(--connection-warning-icon, #f59e0b)" className="connecting-spinner" />;
       }
       if (connection.status === "closing") {
-        return <Loader size={14} color="#ef4444" className="closing-spinner" />;
+        return <Loader size={14} color="var(--connection-danger-icon, #ef4444)" className="closing-spinner" />;
       }
       if (isActive) {
-        return <CheckCircle size={14} color="#10b981" />;
+        return <CheckCircle size={14} color="var(--connection-success-icon, #10b981)" />;
       }
-      return <XCircle size={14} color="#ef4444" />;
+      return <XCircle size={14} color="var(--connection-danger-icon, #ef4444)" />;
     };
 
     // Helper function to get status text class
@@ -217,14 +217,14 @@ const WebSocketList = ({
     // Get traffic status icon and color
     const getTrafficStatusIcon = () => {
       if (connection.isIgnored) {
-        return <Ban size={12} color="#ef4444" title="Connection ignored due to high traffic" />;
+        return <Ban size={12} color="var(--connection-danger-icon, #ef4444)" title="Connection ignored due to high traffic" />;
       }
       
       switch (connection.trafficLevel) {
         case "extreme":
-          return <AlertTriangle size={12} color="#ef4444" title={`Extreme traffic: ${connection.messagesPerSecond} msg/s`} />;
+          return <AlertTriangle size={12} color="var(--connection-danger-icon, #ef4444)" title={`Extreme traffic: ${connection.messagesPerSecond} msg/s`} />;
         case "high":
-          return <AlertTriangle size={12} color="#f59e0b" title={`High traffic: ${connection.messagesPerSecond} msg/s`} />;
+          return <AlertTriangle size={12} color="var(--connection-warning-icon, #f59e0b)" title={`High traffic: ${connection.messagesPerSecond} msg/s`} />;
         default:
           return null;
       }
@@ -327,7 +327,7 @@ const WebSocketList = ({
                 title={connection.isIgnored ? "Resume monitoring this connection" : "Ignore this high-traffic connection"}
                 tabIndex={-1}
               >
-                {connection.isIgnored ? <Play size={12} color="#10b981" /> : <Ban size={12} color="#ef4444" />}
+                {connection.isIgnored ? <Play size={12} color="var(--connection-success-icon, #10b981)" /> : <Ban size={12} color="var(--connection-danger-icon, #ef4444)" />}
               </button>
             )}
           </div>

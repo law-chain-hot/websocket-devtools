@@ -150,7 +150,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
               {t("system.title")}
               <Tooltip
                 label={<span style={{whiteSpace: 'pre-line'}}>{t("system.closeEvent.notice")}</span>}
-                color="#f59e0b"
+                color="var(--system-tooltip-background, rgb(65, 43, 6))"
                 position="right"
                 withArrow
                 arrowSize={6}
@@ -158,9 +158,9 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                 style={{
                   fontSize: 12,
                   fontWeight: 500,
-                  background: "rgb(65, 43, 6)",
-                  color: "#f59e0b",
-                  borderLeft: "3px solid #f59e0b",
+                  background: "var(--system-tooltip-background, rgb(65, 43, 6))",
+                  color: "var(--system-warning-text, #f59e0b)",
+                  borderLeft: "3px solid var(--system-warning-text, #f59e0b)",
                   borderRadius: 4,
                   padding: "10px 14px",
                   maxWidth: 340,
@@ -174,7 +174,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                 closeDelay={200}
                 withinPortal={false}
               >
-                <CircleAlert size={12} style={{ color: "#f59e0b", cursor: "pointer", verticalAlign: 'middle' }} />
+                <CircleAlert size={12} style={{ color: "var(--system-warning-text, #f59e0b)", cursor: "pointer", verticalAlign: 'middle' }} />
               </Tooltip>
             </h2>
             <p>{t("system.description")}</p>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
@@ -7,6 +7,9 @@ import WebSocketList from "../components/WebSocketList.jsx";
 import MessageDetails from "../components/MessageDetails.jsx";
 import FloatingSimulate from "../components/FloatingSimulate.jsx";
 import LanguageSelector from "../components/LanguageSelector.jsx";
+import ThemeToggle from "../components/ThemeToggle.jsx";
+import { useTheme } from "../hooks/useTheme.js";
+import { initializeTheme } from "../utils/theme.js";
 import ExtensionIcon from "../Icons/ExtensionIcon.jsx";
 import { t, addLanguageChangeListener, getCurrentLanguage, initForPanel } from "../utils/i18n.js";
 import i18n from "../utils/i18n.js";
@@ -18,7 +21,22 @@ const MAX_MESSAGES_PER_CONNECTION = 5000; // Max messages retained per connectio
 const MAX_TOTAL_MESSAGES = 20000; // Max total messages across all connections
 const MAX_PROCESSED_IDS = 50000; // Max processed message IDs to retain
 
+/**
+ * Connection details change for every message, while membership changes only when a connection is added or cleared.
+ * @param {Map<unknown, unknown>} previousConnections
+ * @param {Map<unknown, unknown>} nextConnections
+ * @returns {boolean}
+ */
+const hasSameConnectionIds = (previousConnections, nextConnections) => {
+  if (previousConnections.size !== nextConnections.size) return false;
+  for (const connectionId of previousConnections.keys()) {
+    if (!nextConnections.has(connectionId)) return false;
+  }
+  return true;
+};
+
 const WebSocketPanel = () => {
+  const colorScheme = useTheme();
   const [isMonitoring, setIsMonitoring] = useState(true);
   const [blockStatus, setBlockStatus] = useState({
     send: false,
@@ -33,7 +51,26 @@ const WebSocketPanel = () => {
   const [circuitBreakerRate, setCircuitBreakerRate] = useState(0);
 
   // Separate connection management and message management
-  const [connectionsMap, setConnectionsMap] = useState(new Map()); // Basic info for all connections (including active and inactive)
+  const [connections, setConnections] = useState(() => ({
+    map: new Map(),
+    ids: new Set(),
+  }));
+  const connectionsMap = connections.map; // Basic info for all connections (including active and inactive)
+  const connectionIds = connections.ids;
+
+  // Keep the membership Set reference stable when only connection metadata changes.
+  const setConnectionsMap = useCallback((updateConnections) => {
+    setConnections((previousConnections) => {
+      const nextConnections = typeof updateConnections === "function"
+        ? updateConnections(previousConnections.map)
+        : updateConnections;
+      const ids = hasSameConnectionIds(previousConnections.map, nextConnections)
+        ? previousConnections.ids
+        : new Set(nextConnections.keys());
+
+      return { map: nextConnections, ids };
+    });
+  }, []);
 
   // Message deduplication mechanism
   const processedMessageIds = useRef(new Set());
@@ -674,8 +711,9 @@ const WebSocketPanel = () => {
   // Show loading while i18n initializes
 
 
+  // Keep Mantine components aligned with the extension-wide preference.
   return (
-    <MantineProvider>
+    <MantineProvider forceColorScheme={colorScheme}>
       <div className="websocket-panel">
         <div className="panel-header">
           <div className="panel-header-left">
@@ -693,6 +731,7 @@ const WebSocketPanel = () => {
             )}
           </div>
           <div className="panel-status">
+            <ThemeToggle />
             <LanguageSelector />
             <button 
               className="extension-icon-panel"
@@ -784,6 +823,7 @@ const WebSocketPanel = () => {
                 <MessageDetails
                   connection={selectedConnection}
                   selectedConnectionId={selectedConnectionId} // 传递连接ID用于详情面板重新渲染
+                  connectionIds={connectionIds}
                   onSimulateMessage={handleSimulateMessage}
                   onClearMessages={handleClearMessages}
                   onOpenSimulatePanel={handleOpenSimulatePanel}
@@ -808,4 +848,4 @@ const WebSocketPanel = () => {
 // 渲染到 DOM
 const container = document.getElementById("root");
 const root = createRoot(container);
-root.render(<WebSocketPanel />);
+initializeTheme().then(() => root.render(<WebSocketPanel />));

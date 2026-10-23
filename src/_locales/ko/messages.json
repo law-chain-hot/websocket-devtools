@@ -1,4 +1,12 @@
 {
+  "theme_switchToLight": {
+    "message": "라이트 테마로 전환",
+    "description": "Translation for theme.switchToLight"
+  },
+  "theme_switchToDark": {
+    "message": "다크 테마로 전환",
+    "description": "Translation for theme.switchToDark"
+  },
   "app_title": {
     "message": "WebSocket DevTools",
     "description": "Translation for app.title"
@@ -815,6 +823,62 @@
     "message": "모든 메시지 지우기",
     "description": "Translation for messageDetails.controls.clearMessages"
   },
+  "messageDetails_grouping_enable": {
+    "message": "그룹",
+    "description": "Translation for messageDetails.grouping.enable"
+  },
+  "messageDetails_grouping_field": {
+    "message": "필드",
+    "description": "Translation for messageDetails.grouping.field"
+  },
+  "messageDetails_grouping_value": {
+    "message": "값",
+    "description": "Translation for messageDetails.grouping.value"
+  },
+  "messageDetails_grouping_displayField": {
+    "message": "표시 필드",
+    "description": "Translation for messageDetails.grouping.displayField"
+  },
+  "messageDetails_grouping_tooltip": {
+    "message": "JSON 필드와 선택적 정확한 값으로 메시지를 그룹화",
+    "description": "Translation for messageDetails.grouping.tooltip"
+  },
+  "messageDetails_grouping_emptyValueHint": {
+    "message": "값을 비우면 필드의 모든 값으로 그룹화합니다",
+    "description": "Translation for messageDetails.grouping.emptyValueHint"
+  },
+  "messageDetails_grouping_other": {
+    "message": "기타 메시지",
+    "description": "Translation for messageDetails.grouping.other"
+  },
+  "messageDetails_grouping_noField": {
+    "message": "{{field}} 없음",
+    "description": "Translation for messageDetails.grouping.noField"
+  },
+  "messageDetails_grouping_sort": {
+    "message": "정렬",
+    "description": "Translation for messageDetails.grouping.sort"
+  },
+  "messageDetails_grouping_sort_firstOutgoing": {
+    "message": "첫 전송",
+    "description": "Translation for messageDetails.grouping.sort.firstOutgoing"
+  },
+  "messageDetails_grouping_sort_firstMessage": {
+    "message": "첫 메시지",
+    "description": "Translation for messageDetails.grouping.sort.firstMessage"
+  },
+  "messageDetails_grouping_sort_latestMessage": {
+    "message": "최근 메시지",
+    "description": "Translation for messageDetails.grouping.sort.latestMessage"
+  },
+  "messageDetails_grouping_sort_groupValue": {
+    "message": "그룹 값",
+    "description": "Translation for messageDetails.grouping.sort.groupValue"
+  },
+  "messageDetails_grouping_sort_messageCount": {
+    "message": "메시지 수",
+    "description": "Translation for messageDetails.grouping.sort.messageCount"
+  },
   "messageDetails_table_data": {
     "message": "데이터",
     "description": "Translation for messageDetails.table.data"
@@ -943,6 +1007,14 @@
     "message": "붙여넣기",
     "description": "Translation for common.paste"
   },
+  "common_rawData": {
+    "message": "원시 데이터",
+    "description": "Translation for common.rawData"
+  },
+  "common_binary": {
+    "message": "바이너리",
+    "description": "Translation for common.binary"
+  },
   "common_cut": {
     "message": "잘라내기",
     "description": "Translation for common.cut"
@@ -1046,6 +1118,118 @@
   "simulate_animated_githubTooltip": {
     "message": "이 플러그인이 마음에 드시면 Github 저장소도 확인해보세요~",
     "description": "Translation for simulate.animated.githubTooltip"
+  },
+  "jsonViewer_tooltips_search": {
+    "message": "검색 (Ctrl+F)",
+    "description": "Translation for jsonViewer.tooltips.search"
+  },
+  "messageDetails_controls_horizontalLayout": {
+    "message": "좌우 레이아웃으로 전환",
+    "description": "Translation for messageDetails.controls.horizontalLayout"
+  },
+  "messageDetails_controls_verticalLayout": {
+    "message": "상하 레이아웃으로 전환",
+    "description": "Translation for messageDetails.controls.verticalLayout"
+  },
+  "messageDetails_projection_mode": {
+    "message": "표시 모드",
+    "description": "Translation for messageDetails.projection.mode"
+  },
+  "messageDetails_projection_raw": {
+    "message": "원시 데이터",
+    "description": "Translation for messageDetails.projection.raw"
+  },
+  "messageDetails_projection_field": {
+    "message": "지정 필드",
+    "description": "Translation for messageDetails.projection.field"
+  },
+  "messageDetails_projection_path": {
+    "message": "필드",
+    "description": "Translation for messageDetails.projection.path"
+  },
+  "messageDetails_projection_apply": {
+    "message": "적용",
+    "description": "Translation for messageDetails.projection.apply"
+  },
+  "messageDetails_projection_clear": {
+    "message": "지우기",
+    "description": "Translation for messageDetails.projection.clear"
+  },
+  "messageDetails_projection_candidates": {
+    "message": "필드 후보",
+    "description": "Translation for messageDetails.projection.candidates"
+  },
+  "messageDetails_projection_hideMissing": {
+    "message": "일치하지 않는 메시지 숨기기",
+    "description": "Translation for messageDetails.projection.hideMissing"
+  },
+  "messageDetails_projection_hideEmpty": {
+    "message": "빈 문자열 숨기기",
+    "description": "Translation for messageDetails.projection.hideEmpty"
+  },
+  "messageDetails_projection_invalidPath": {
+    "message": "choices[0].message.content와 같은 정확한 경로를 사용하세요.",
+    "description": "Translation for messageDetails.projection.invalidPath"
+  },
+  "messageDetails_projection_count": {
+    "message": "표시 {{visible}} / {{total}}",
+    "description": "Translation for messageDetails.projection.count"
+  },
+  "messageDetails_projection_value": {
+    "message": "필드 값",
+    "description": "Translation for messageDetails.projection.value"
+  },
+  "messageDetails_projection_noVisibleValues": {
+    "message": "이 필드에 표시할 값이 없습니다.",
+    "description": "Translation for messageDetails.projection.noVisibleValues"
+  },
+  "messageDetails_projection_showAll": {
+    "message": "일치하지 않는 메시지 표시",
+    "description": "Translation for messageDetails.projection.showAll"
+  },
+  "messageDetails_projection_restoreRaw": {
+    "message": "원시 데이터로 복원",
+    "description": "Translation for messageDetails.projection.restoreRaw"
+  },
+  "messageDetails_projection_status_missing": {
+    "message": "필드가 없습니다",
+    "description": "Translation for messageDetails.projection.status.missing"
+  },
+  "messageDetails_projection_status_invalidJson": {
+    "message": "JSON을 해석할 수 없습니다",
+    "description": "Translation for messageDetails.projection.status.invalidJson"
+  },
+  "messageDetails_projection_status_unsupported": {
+    "message": "이 메시지 유형은 지원되지 않습니다",
+    "description": "Translation for messageDetails.projection.status.unsupported"
+  },
+  "messageDetails_projection_status_notApplicable": {
+    "message": "적용되지 않음",
+    "description": "Translation for messageDetails.projection.status.notApplicable"
+  },
+  "messageDetails_projection_status_empty": {
+    "message": "빈 문자열",
+    "description": "Translation for messageDetails.projection.status.empty"
+  },
+  "messageDetails_projection_status_whitespace": {
+    "message": "공백 문자",
+    "description": "Translation for messageDetails.projection.status.whitespace"
+  },
+  "messageDetails_projection_expand": {
+    "message": "펼치기",
+    "description": "Translation for messageDetails.projection.expand"
+  },
+  "messageDetails_projection_collapse": {
+    "message": "접기",
+    "description": "Translation for messageDetails.projection.collapse"
+  },
+  "messageDetails_projection_searchRawTooltip": {
+    "message": "원시 메시지 데이터 검색",
+    "description": "Translation for messageDetails.projection.searchRawTooltip"
+  },
+  "messageDetails_projection_lengthTooltip": {
+    "message": "원본 메시지 문자 길이",
+    "description": "Translation for messageDetails.projection.lengthTooltip"
   },
   "extensionName": {
     "message": "WebSocket DevTools",

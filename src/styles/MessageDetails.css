@@ -661,6 +661,178 @@
   height: 100%;
 }
 
+.projection-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+
+.projection-mode {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.projection-mode button,
+.projection-path-control button,
+.projection-empty-state button,
+.message-projection-expand {
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 10px;
+  min-height: 20px;
+  padding: 2px 6px;
+}
+
+.projection-mode button + button {
+  margin-left: -1px;
+}
+
+.projection-mode button.active {
+  background: color-mix(in srgb, var(--accent-color) 15%, var(--bg-primary));
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  position: relative;
+}
+
+.projection-mode button:hover,
+.projection-path-control button:hover,
+.projection-empty-state button:hover,
+.message-projection-expand:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.projection-mode button:focus-visible,
+.projection-path-control button:focus-visible,
+.projection-empty-state button:focus-visible,
+.message-projection-expand:focus-visible,
+.projection-path-control input:focus-visible,
+.projection-candidates:focus-visible {
+  outline: 1px solid var(--accent-color);
+  outline-offset: 1px;
+}
+
+.projection-path-control {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1 1 260px;
+  min-width: 180px;
+}
+
+.projection-path-control label {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  font-size: 10px;
+}
+
+.projection-path-control input,
+.projection-candidates {
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font: 10px/1.3 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  height: 20px;
+  min-width: 0;
+}
+
+.projection-path-control input {
+  flex: 1;
+  padding: 2px 5px;
+}
+
+.projection-candidates {
+  flex: 1 1 220px;
+  max-width: 360px;
+}
+
+.projection-checkbox {
+  flex-shrink: 0;
+}
+
+.projection-error {
+  color: var(--danger-color);
+  font-size: 10px;
+}
+
+.projection-count {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.message-projection-cell {
+  align-items: flex-start;
+  overflow: visible;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+.message-projection-value-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+  width: 100%;
+}
+
+.message-projection-value {
+  line-height: 1.5;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.message-projection-value.clamped {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
+}
+
+.message-projection-expand {
+  flex-shrink: 0;
+}
+
+.message-projection-state,
+.message-projection-whitespace {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.message-row.selected .message-projection-state,
+.message-row.selected .message-projection-whitespace {
+  color: inherit;
+}
+
+.projection-empty-state button + button {
+  margin-left: 0;
+}
+
+.projection-empty-state {
+  flex-direction: column;
+  gap: 8px;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .projection-path-control,
+  .projection-candidates {
+    flex-basis: 100%;
+    max-width: none;
+  }
+}
+
 .data-cell.system {
   color: var(--accent-color);
   flex-wrap: nowrap;

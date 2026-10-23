@@ -1,4 +1,12 @@
 {
+  "theme_switchToLight": {
+    "message": "Switch to light theme",
+    "description": "Translation for theme.switchToLight"
+  },
+  "theme_switchToDark": {
+    "message": "Switch to dark theme",
+    "description": "Translation for theme.switchToDark"
+  },
   "app_title": {
     "message": "WebSocket DevTools",
     "description": "Translation for app.title"
@@ -1142,6 +1150,106 @@
   "messageDetails_controls_verticalLayout": {
     "message": "Switch to top/bottom layout",
     "description": "Translation for messageDetails.controls.verticalLayout"
+  },
+  "messageDetails_projection_mode": {
+    "message": "Display mode",
+    "description": "Translation for messageDetails.projection.mode"
+  },
+  "messageDetails_projection_raw": {
+    "message": "Raw data",
+    "description": "Translation for messageDetails.projection.raw"
+  },
+  "messageDetails_projection_field": {
+    "message": "Field",
+    "description": "Translation for messageDetails.projection.field"
+  },
+  "messageDetails_projection_path": {
+    "message": "Field",
+    "description": "Translation for messageDetails.projection.path"
+  },
+  "messageDetails_projection_apply": {
+    "message": "Apply",
+    "description": "Translation for messageDetails.projection.apply"
+  },
+  "messageDetails_projection_clear": {
+    "message": "Clear",
+    "description": "Translation for messageDetails.projection.clear"
+  },
+  "messageDetails_projection_candidates": {
+    "message": "Field candidates",
+    "description": "Translation for messageDetails.projection.candidates"
+  },
+  "messageDetails_projection_hideMissing": {
+    "message": "Hide unmatched messages",
+    "description": "Translation for messageDetails.projection.hideMissing"
+  },
+  "messageDetails_projection_hideEmpty": {
+    "message": "Hide empty strings",
+    "description": "Translation for messageDetails.projection.hideEmpty"
+  },
+  "messageDetails_projection_invalidPath": {
+    "message": "Use an exact path such as choices[0].message.content.",
+    "description": "Translation for messageDetails.projection.invalidPath"
+  },
+  "messageDetails_projection_count": {
+    "message": "Showing {{visible}} / {{total}}",
+    "description": "Translation for messageDetails.projection.count"
+  },
+  "messageDetails_projection_value": {
+    "message": "Field value",
+    "description": "Translation for messageDetails.projection.value"
+  },
+  "messageDetails_projection_noVisibleValues": {
+    "message": "No values are visible for this field.",
+    "description": "Translation for messageDetails.projection.noVisibleValues"
+  },
+  "messageDetails_projection_showAll": {
+    "message": "Show unmatched messages",
+    "description": "Translation for messageDetails.projection.showAll"
+  },
+  "messageDetails_projection_restoreRaw": {
+    "message": "Restore raw data",
+    "description": "Translation for messageDetails.projection.restoreRaw"
+  },
+  "messageDetails_projection_status_missing": {
+    "message": "Field does not exist",
+    "description": "Translation for messageDetails.projection.status.missing"
+  },
+  "messageDetails_projection_status_invalidJson": {
+    "message": "Unable to parse JSON",
+    "description": "Translation for messageDetails.projection.status.invalidJson"
+  },
+  "messageDetails_projection_status_unsupported": {
+    "message": "This message type is not supported",
+    "description": "Translation for messageDetails.projection.status.unsupported"
+  },
+  "messageDetails_projection_status_notApplicable": {
+    "message": "Not applicable",
+    "description": "Translation for messageDetails.projection.status.notApplicable"
+  },
+  "messageDetails_projection_status_empty": {
+    "message": "Empty string",
+    "description": "Translation for messageDetails.projection.status.empty"
+  },
+  "messageDetails_projection_status_whitespace": {
+    "message": "Whitespace characters",
+    "description": "Translation for messageDetails.projection.status.whitespace"
+  },
+  "messageDetails_projection_expand": {
+    "message": "Expand",
+    "description": "Translation for messageDetails.projection.expand"
+  },
+  "messageDetails_projection_collapse": {
+    "message": "Collapse",
+    "description": "Translation for messageDetails.projection.collapse"
+  },
+  "messageDetails_projection_searchRawTooltip": {
+    "message": "Searches raw message data",
+    "description": "Translation for messageDetails.projection.searchRawTooltip"
+  },
+  "messageDetails_projection_lengthTooltip": {
+    "message": "Original message character length",
+    "description": "Translation for messageDetails.projection.lengthTooltip"
   },
   "extensionName": {
     "message": "WebSocket DevTools",

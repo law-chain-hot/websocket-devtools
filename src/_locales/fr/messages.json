@@ -1,4 +1,12 @@
 {
+  "theme_switchToLight": {
+    "message": "Passer au thème clair",
+    "description": "Translation for theme.switchToLight"
+  },
+  "theme_switchToDark": {
+    "message": "Passer au thème sombre",
+    "description": "Translation for theme.switchToDark"
+  },
   "app_title": {
     "message": "WebSocket DevTools",
     "description": "Translation for app.title"
@@ -811,6 +819,62 @@
     "message": "Effacer tous les messages",
     "description": "Translation for messageDetails.controls.clearMessages"
   },
+  "messageDetails_grouping_enable": {
+    "message": "Grouper",
+    "description": "Translation for messageDetails.grouping.enable"
+  },
+  "messageDetails_grouping_field": {
+    "message": "Champ",
+    "description": "Translation for messageDetails.grouping.field"
+  },
+  "messageDetails_grouping_value": {
+    "message": "Valeur",
+    "description": "Translation for messageDetails.grouping.value"
+  },
+  "messageDetails_grouping_displayField": {
+    "message": "Afficher",
+    "description": "Translation for messageDetails.grouping.displayField"
+  },
+  "messageDetails_grouping_tooltip": {
+    "message": "Grouper les messages par champ JSON et valeur exacte optionnelle",
+    "description": "Translation for messageDetails.grouping.tooltip"
+  },
+  "messageDetails_grouping_emptyValueHint": {
+    "message": "Laisser la valeur vide pour grouper par toutes les valeurs du champ",
+    "description": "Translation for messageDetails.grouping.emptyValueHint"
+  },
+  "messageDetails_grouping_other": {
+    "message": "Autres messages",
+    "description": "Translation for messageDetails.grouping.other"
+  },
+  "messageDetails_grouping_noField": {
+    "message": "Aucun {{field}}",
+    "description": "Translation for messageDetails.grouping.noField"
+  },
+  "messageDetails_grouping_sort": {
+    "message": "Trier",
+    "description": "Translation for messageDetails.grouping.sort"
+  },
+  "messageDetails_grouping_sort_firstOutgoing": {
+    "message": "Premier envoyé",
+    "description": "Translation for messageDetails.grouping.sort.firstOutgoing"
+  },
+  "messageDetails_grouping_sort_firstMessage": {
+    "message": "Premier message",
+    "description": "Translation for messageDetails.grouping.sort.firstMessage"
+  },
+  "messageDetails_grouping_sort_latestMessage": {
+    "message": "Dernier message",
+    "description": "Translation for messageDetails.grouping.sort.latestMessage"
+  },
+  "messageDetails_grouping_sort_groupValue": {
+    "message": "Valeur du groupe",
+    "description": "Translation for messageDetails.grouping.sort.groupValue"
+  },
+  "messageDetails_grouping_sort_messageCount": {
+    "message": "Nombre de messages",
+    "description": "Translation for messageDetails.grouping.sort.messageCount"
+  },
   "messageDetails_table_data": {
     "message": "Données",
     "description": "Translation for messageDetails.table.data"
@@ -939,6 +1003,14 @@
     "message": "Coller",
     "description": "Translation for common.paste"
   },
+  "common_rawData": {
+    "message": "Données brutes",
+    "description": "Translation for common.rawData"
+  },
+  "common_binary": {
+    "message": "BINAIRE",
+    "description": "Translation for common.binary"
+  },
   "common_cut": {
     "message": "Couper",
     "description": "Translation for common.cut"
@@ -1042,6 +1114,118 @@
   "simulate_animated_githubTooltip": {
     "message": "Si vous aimez ce plugin, jetez un œil à notre dépôt Github ~",
     "description": "Translation for simulate.animated.githubTooltip"
+  },
+  "jsonViewer_tooltips_search": {
+    "message": "Rechercher (Ctrl+F)",
+    "description": "Translation for jsonViewer.tooltips.search"
+  },
+  "messageDetails_controls_horizontalLayout": {
+    "message": "Passer en disposition gauche/droite",
+    "description": "Translation for messageDetails.controls.horizontalLayout"
+  },
+  "messageDetails_controls_verticalLayout": {
+    "message": "Passer en disposition haut/bas",
+    "description": "Translation for messageDetails.controls.verticalLayout"
+  },
+  "messageDetails_projection_mode": {
+    "message": "Mode d'affichage",
+    "description": "Translation for messageDetails.projection.mode"
+  },
+  "messageDetails_projection_raw": {
+    "message": "Données brutes",
+    "description": "Translation for messageDetails.projection.raw"
+  },
+  "messageDetails_projection_field": {
+    "message": "Champ spécifié",
+    "description": "Translation for messageDetails.projection.field"
+  },
+  "messageDetails_projection_path": {
+    "message": "Champ",
+    "description": "Translation for messageDetails.projection.path"
+  },
+  "messageDetails_projection_apply": {
+    "message": "Appliquer",
+    "description": "Translation for messageDetails.projection.apply"
+  },
+  "messageDetails_projection_clear": {
+    "message": "Effacer",
+    "description": "Translation for messageDetails.projection.clear"
+  },
+  "messageDetails_projection_candidates": {
+    "message": "Champs candidats",
+    "description": "Translation for messageDetails.projection.candidates"
+  },
+  "messageDetails_projection_hideMissing": {
+    "message": "Masquer les messages non correspondants",
+    "description": "Translation for messageDetails.projection.hideMissing"
+  },
+  "messageDetails_projection_hideEmpty": {
+    "message": "Masquer les chaînes vides",
+    "description": "Translation for messageDetails.projection.hideEmpty"
+  },
+  "messageDetails_projection_invalidPath": {
+    "message": "Utilisez un chemin exact tel que choices[0].message.content.",
+    "description": "Translation for messageDetails.projection.invalidPath"
+  },
+  "messageDetails_projection_count": {
+    "message": "Affichage {{visible}} / {{total}}",
+    "description": "Translation for messageDetails.projection.count"
+  },
+  "messageDetails_projection_value": {
+    "message": "Valeur du champ",
+    "description": "Translation for messageDetails.projection.value"
+  },
+  "messageDetails_projection_noVisibleValues": {
+    "message": "Aucune valeur visible pour ce champ.",
+    "description": "Translation for messageDetails.projection.noVisibleValues"
+  },
+  "messageDetails_projection_showAll": {
+    "message": "Afficher les messages non correspondants",
+    "description": "Translation for messageDetails.projection.showAll"
+  },
+  "messageDetails_projection_restoreRaw": {
+    "message": "Restaurer les données brutes",
+    "description": "Translation for messageDetails.projection.restoreRaw"
+  },
+  "messageDetails_projection_status_missing": {
+    "message": "Le champ n'existe pas",
+    "description": "Translation for messageDetails.projection.status.missing"
+  },
+  "messageDetails_projection_status_invalidJson": {
+    "message": "Impossible d'analyser le JSON",
+    "description": "Translation for messageDetails.projection.status.invalidJson"
+  },
+  "messageDetails_projection_status_unsupported": {
+    "message": "Ce type de message n'est pas pris en charge",
+    "description": "Translation for messageDetails.projection.status.unsupported"
+  },
+  "messageDetails_projection_status_notApplicable": {
+    "message": "Non applicable",
+    "description": "Translation for messageDetails.projection.status.notApplicable"
+  },
+  "messageDetails_projection_status_empty": {
+    "message": "Chaîne vide",
+    "description": "Translation for messageDetails.projection.status.empty"
+  },
+  "messageDetails_projection_status_whitespace": {
+    "message": "Caractères d'espacement",
+    "description": "Translation for messageDetails.projection.status.whitespace"
+  },
+  "messageDetails_projection_expand": {
+    "message": "Développer",
+    "description": "Translation for messageDetails.projection.expand"
+  },
+  "messageDetails_projection_collapse": {
+    "message": "Réduire",
+    "description": "Translation for messageDetails.projection.collapse"
+  },
+  "messageDetails_projection_searchRawTooltip": {
+    "message": "Recherche les données brutes du message",
+    "description": "Translation for messageDetails.projection.searchRawTooltip"
+  },
+  "messageDetails_projection_lengthTooltip": {
+    "message": "Longueur en caractères du message d'origine",
+    "description": "Translation for messageDetails.projection.lengthTooltip"
   },
   "extensionName": {
     "message": "WebSocket DevTools",

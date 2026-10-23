@@ -440,6 +440,36 @@ function showDevToolsHint() {
     .ws-devtools-hint *:focus {
       outline: none !important;
     }
+
+    /* Scope the light palette to the hint, never to the inspected page. */
+    .ws-devtools-hint[data-theme="light"] {
+      background: #ffffff !important;
+      color: #1b2533 !important;
+      border-color: #cbd3de !important;
+      box-shadow: 0 8px 28px rgba(27, 37, 51, 0.18) !important;
+      color-scheme: light;
+    }
+    .ws-devtools-hint[data-theme="light"]::before {
+      background: #cbd3de;
+    }
+    .ws-devtools-hint[data-theme="light"] .ws-hint-title {
+      color: #1b2533 !important;
+    }
+    .ws-devtools-hint[data-theme="light"] .ws-hint-secondary {
+      color: #465469 !important;
+    }
+    .ws-devtools-hint[data-theme="light"] .ws-hint-instructions {
+      background: #f3f5f8 !important;
+      border-color: #cbd3de !important;
+    }
+    .ws-devtools-hint[data-theme="light"] strong,
+    .ws-devtools-hint[data-theme="light"] svg {
+      color: #047857 !important;
+      stroke: #047857;
+    }
+    .ws-devtools-hint[data-theme="light"] .ws-hint-key {
+      background: #047857 !important;
+    }
   `;
   document.head.appendChild(style);
 
@@ -508,6 +538,7 @@ function showDevToolsHint() {
   const textContainer = document.createElement("div");
   
   const titleDiv = document.createElement("div");
+  titleDiv.className = "ws-hint-title";
   titleDiv.textContent = "WebSocket DevTools";
   Object.assign(titleDiv.style, {
     fontWeight: "700",
@@ -517,6 +548,7 @@ function showDevToolsHint() {
   });
 
   const subtitleDiv = document.createElement("div");
+  subtitleDiv.className = "ws-hint-secondary";
   subtitleDiv.textContent = "Ready to monitor";
   Object.assign(subtitleDiv.style, {
     fontSize: "12px",
@@ -530,6 +562,7 @@ function showDevToolsHint() {
 
   // Create instructions section
   const instructionsDiv = document.createElement("div");
+  instructionsDiv.className = "ws-hint-instructions";
   Object.assign(instructionsDiv.style, {
     marginBottom: "20px",
     lineHeight: "1.5",
@@ -540,6 +573,7 @@ function showDevToolsHint() {
   });
 
   const instructionTitle = document.createElement("div");
+  instructionTitle.className = "ws-hint-title";
   instructionTitle.style.marginBottom = "12px";
   instructionTitle.style.fontSize = "15px";
   instructionTitle.style.fontWeight = "600";
@@ -547,6 +581,7 @@ function showDevToolsHint() {
   
   const pressText = document.createTextNode("Press ");
   const f12Span = document.createElement("span");
+  f12Span.className = "ws-hint-key";
   f12Span.textContent = "F12";
   Object.assign(f12Span.style, {
     background: "#10b981",
@@ -564,6 +599,7 @@ function showDevToolsHint() {
   instructionTitle.appendChild(toOpenText);
 
   const instructionDesc = document.createElement("div");
+  instructionDesc.className = "ws-hint-secondary";
   Object.assign(instructionDesc.style, {
     color: "rgba(203, 213, 225, 0.8)",
     fontSize: "13px",
@@ -605,8 +641,28 @@ function showDevToolsHint() {
 
   document.body.appendChild(hint);
 
+  // Keep the temporary hint in sync, and discard stale initialization results.
+  const themeStorageKey = "websocket-devtools-theme";
+  let themeChanged = false;
+  const applyHintTheme = (value) => {
+    hintContent.dataset.theme = value === "light" ? "light" : "dark";
+  };
+  const themeListener = (changes, area) => {
+    if (area === "local" && Object.prototype.hasOwnProperty.call(changes, themeStorageKey)) {
+      themeChanged = true;
+      applyHintTheme(changes[themeStorageKey].newValue);
+    }
+  };
+  chrome.storage.onChanged.addListener(themeListener);
+  chrome.storage.local.get([themeStorageKey], (result) => {
+    if (!chrome.runtime.lastError && !themeChanged && hint.isConnected) {
+      applyHintTheme(result[themeStorageKey]);
+    }
+  });
+
   // Enhanced close functionality
   const closeHint = () => {
+    chrome.storage.onChanged.removeListener(themeListener);
     if (hint.parentElement) {
       hint.remove();
     }
